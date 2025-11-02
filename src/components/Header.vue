@@ -11,7 +11,7 @@
         <nav class="header__nav">
             <ul class="header__nav-list">
                 <li class="header__nav-list-item"><RouterLink to="/" class="header__nav-list-item-link">Home</RouterLink></li>
-                <li class="header__nav-list-item"><RouterLink to="/" class="header__nav-list-item-link">Shop</RouterLink></li>
+                <li class="header__nav-list-item"><RouterLink to="/shop" class="header__nav-list-item-link">Shop</RouterLink></li>
                 <li class="header__nav-list-item"><RouterLink to="/" class="header__nav-list-item-link">Plant care</RouterLink></li>
                 <li class="header__nav-list-item"><RouterLink to="/" class="header__nav-list-item-link">Blogs</RouterLink></li>
             </ul>
@@ -53,14 +53,23 @@
                 display: flex;
                 gap: 3.125rem;
                 list-style: none;
-
+                
                 @media (max-width: 979px) {
                     gap: 2rem;
+                }
+                
+                &-item:hover{
+                    transform: scale(1.1);
                 }
 
                 &-item-link{
                     text-decoration: none;
                     color: #3d3d3d;
+
+                    &:hover{
+                        border-bottom: 2.5px solid #46A358;
+                        color: #46A358;
+                    }
                 }
                 
             }

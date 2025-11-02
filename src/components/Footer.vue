@@ -108,6 +108,10 @@
                         border-radius: 0.375rem 0 0 0.375rem;
                         border: transparent;
                         width: 77%;
+
+                        &:focus{
+                            outline: none;
+                        }
                     }
 
                     &-button{

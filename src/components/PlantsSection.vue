@@ -1,87 +1,46 @@
 <script setup>
     import CardsPlants from './CardsPlants.vue';
-    import img1 from '../assets/icons/plant1.png';
-    import img2 from '../assets/icons/plant2.png';
-    import img3 from '../assets/icons/plant3.png';
-    import { ref } from 'vue';
+    import { onMounted, ref } from 'vue';
 
     const minPrice = ref();
     const maxPrice = ref();
 
-    const cards = [
-        {
-            id: 1,
-            image: img1,
-            title: 'Barberton Daisy',
-            price: '119.00',
-            size: 'large',
-        },
-        {
-            id: 2,
-            image: img2,
-            title: 'Angel Wing Begonia',
-            price: '169.00',
-            size: 'medium',
-        },
-        {
-            id: 3,
-            image: img3,
-            title: 'African Violet',
-            price: '199.00',
-            size: 'small',
-        },
-        {
-            id: 4,
-            image: img1,
-            title: 'Barberton Daisy',
-            price: '119.00',
-            size: 'large',
-        },
-        {
-            id: 5,
-            image: img2,
-            title: 'Angel Wing Begonia',
-            price: '169.00',
-            size: 'medium',
-        },
-        {
-            id: 6,
-            image: img3,
-            title: 'African Violet',
-            price: '199.00',
-            size: 'small',
-        },
-        {
-            id: 7,
-            image: img1,
-            title: 'Barberton Daisy',
-            price: '119.00',
-            size: 'large',
-        },
-        {
-            id: 8,
-            image: img2,
-            title: 'Angel Wing Begonia',
-            price: '169.00',
-            size: 'medium',
-        },
-        {
-            id: 9,
-            image: img3,
-            title: 'African Violet',
-            price: '199.00',
-            size: 'small',
-        },
-    ];
+    const cards = ref([]);
+    const result = ref();
 
+    async function plants() {
+        const response = await fetch('../../Plants.json');
+        const data = await response.json();
+        cards.value = data;
+        result.value = cards.value;
+    }
+    
+    onMounted(() => {
+        plants();
+    });
+    
     function countPlant(value){
         let count = 0;
-        for(let i = 0; i < cards.length; i++){
-            if(cards[i].size == value){
+        for(let i = 0; i < cards.value.length; i++){
+            if(cards.value[i].size == value){
                 count++;
+            }else if(value == "all"){
+                return cards.value.length;
             }
         }
         return count;
+    }
+
+    const isActive = ref('all');
+
+    function filterPlants(value){
+        if(value == 'all'){
+            isActive.value = value;
+            result.value = cards.value;
+        }else{
+            isActive.value = value;
+            result.value = cards.value.filter((card) => card.size == value);
+        }
     }
 </script>
 
@@ -91,28 +50,32 @@
             <div class="plants__left-filters">
                 <h3 class="plants__left-filters-title">Size</h3>
                 <div class="plants__left-filters-size">
-                    <div class="plants__left-filters-size-block">
+                    <div @click="filterPlants('all')" :class="{'active': isActive == 'all'}" class="plants__left-filters-size-block">
+                        <p class="plants__left-filters-size-text">All</p>
+                        <p class="plants__left-filters-size-text plants__left-filters-size-text--count">{{ countPlant("all") }}</p>
+                    </div>
+                    <div @click="filterPlants('small')" :class="{'active': isActive == 'small'}" class="plants__left-filters-size-block">
                         <p class="plants__left-filters-size-text">Small</p>
                         <p class="plants__left-filters-size-text plants__left-filters-size-text--count">{{ countPlant("small") }}</p>
                     </div>
-                    <div class="plants__left-filters-size-block">
+                    <div @click="filterPlants('medium')" :class="{'active': isActive == 'medium'}" class="plants__left-filters-size-block">
                         <p class="plants__left-filters-size-text">Medium</p>
                         <p class="plants__left-filters-size-text plants__left-filters-size-text--count">{{ countPlant("medium") }}</p>
                     </div>
-                    <div class="plants__left-filters-size-block">
+                    <div @click="filterPlants('large')" :class="{'active': isActive == 'large'}" class="plants__left-filters-size-block">
                         <p class="plants__left-filters-size-text">Large</p>
                         <p class="plants__left-filters-size-text plants__left-filters-size-text--count">{{ countPlant("large") }}</p>
                     </div>
                 </div>
                 <form class="plants__left-filters-price" action="">
                     <div class="plants__left-filters-price-inputs">
-                        <div>
+                        <div class="plants__left-filters-price-inputs-block">
                             <label for="price1">Цена от: </label>
-                            <input v-model="minPrice" id="price1" class="plants__left-filters-price-inputs-input" placeholder="минимум" type="number">
+                            <input v-model="minPrice" id="price1" class="plants__left-filters-price-inputs-block-input" placeholder="минимум" type="number">
                         </div>
-                        <div>
+                        <div class="plants__left-filters-price-inputs-block">
                             <label for="price2">Цена до: </label>
-                            <input v-model="maxPrice" id="price2" class="plants__left-filters-price--inputs-input" placeholder="максимум" type="number">
+                            <input v-model="maxPrice" id="price2" class="plants__left-filters-price-inputs-block-input" placeholder="максимум" type="number">
                         </div>
                     </div>
                     <!-- <button @click.prevent="filter" class="plants__left-filters-price-button">Filter</button> -->
@@ -121,25 +84,11 @@
             <img class="plants__left-img" src="../assets/icons/SuperSaleBanner.png" alt="">
         </div>
         <div class="plants__cards">
-            <template v-for="card in cards" :key="card.id">
-                <template v-if="minPrice || maxPrice">
-                    <!-- <CardsPlants
-                    v-if="(card.price >= minPrice && card.price <= maxPrice) || (card.price >= minPrice && maxPrice == undefined) || (card.price <= maxPrice && minPrice == undefined)"
-                    :image="card.image" :title="card.title" :price="card.price"
-                    /> -->
-                    <!-- <CardsPlants
-                    v-if="(card.price >= minPrice && card.price <= maxPrice)"
-                    :image="card.image" :title="card.title" :price="card.price"
-                    /> -->
-
+            <template v-for="card in result" :key="card.id">
+                <template v-if="(!minPrice || card.price >= minPrice) && (!maxPrice || card.price <= maxPrice)">
                     <CardsPlants
-                        v-if="(!minPrice || card.price >= minPrice) && (!maxPrice || card.price <= maxPrice)"
-                        :image="card.image" :title="card.title" :price="card.price"
-                    />
-                </template>
-                <template v-else>
-                    <CardsPlants
-                        :image="card.image" :title="card.title" :price="card.price"
+                    :key = "card.id"
+                    :image="card.image" :title="card.title" :price="card.price" :id="card.id"
                     />
                 </template>
             </template>
@@ -150,7 +99,6 @@
 <style lang="scss" scoped>
     .plants{
         display: flex;
-        justify-content: space-between;
         gap: 1rem;
         margin-bottom: 2rem;
 
@@ -189,6 +137,17 @@
                         display: flex;
                         justify-content: space-between;
                         gap: 1rem;
+                        cursor: pointer;
+                        padding: 0.25rem;
+                        border-radius: 0.375rem;
+
+                        &:hover{
+                            background: #00f00050;
+                        }
+
+                        &.active{
+                            background: #00f00050;
+                        }
                     }
 
                     &-text{
@@ -208,6 +167,25 @@
                         display: flex;
                         flex-direction: column;
                         gap: 0.25rem;
+
+                        &-block-input{
+                            -moz-appearance: textfield;
+                            border: none;
+                            border-bottom: 1px solid #000;
+
+                            &::-webkit-inner-spin-button, ::-webkit-outer-spin-button{
+                                -webkit-appearance: none;
+                                margin: 0;
+                            }
+
+                            &::-ms-clear{
+                                display: none;
+                            }
+
+                            &:focus{
+                                outline: none;
+                            }
+                        }
                     }
 
                     &-button{
