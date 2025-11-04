@@ -6,7 +6,7 @@
     const cards = ref([]);
 
     async function plants() {
-        const response = await fetch('../assets/Plants.json');
+        const response = await fetch('../../public/Plants.json');
         const data = await response.json();
         cards.value = data;
     }
