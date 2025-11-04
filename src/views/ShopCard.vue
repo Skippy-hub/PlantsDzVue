@@ -16,7 +16,7 @@
     let card;
 
     async function plants() {
-        const response = await fetch('../../public/Plants.json');
+        const response = await fetch('../../Plants.json');
         const data = await response.json();
         card = data.filter((card) => card.id == id);
         title.value = card[0].title;

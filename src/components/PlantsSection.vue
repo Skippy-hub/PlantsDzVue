@@ -9,7 +9,7 @@
     const result = ref();
 
     async function plants() {
-        const response = await fetch('../../public/Plants.json');
+        const response = await fetch('../../Plants.json');
         const data = await response.json();
         cards.value = data;
         result.value = cards.value;
