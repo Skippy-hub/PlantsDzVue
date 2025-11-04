@@ -1,6 +1,7 @@
 <script setup>
     import CardsPlants from './CardsPlants.vue';
     import { onMounted, ref } from 'vue';
+    import Jfile from '../assets/Plants.json'
 
     const minPrice = ref();
     const maxPrice = ref();
@@ -9,7 +10,7 @@
     const result = ref();
 
     async function plants() {
-        const response = await fetch('../../Plants.json');
+        const response = await fetch('../assets/Plants.json');
         const data = await response.json();
         cards.value = data;
         result.value = cards.value;
