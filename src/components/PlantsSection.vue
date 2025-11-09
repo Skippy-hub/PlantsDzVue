@@ -70,15 +70,14 @@
                 <form class="plants__left-filters-price" action="">
                     <div class="plants__left-filters-price-inputs">
                         <div class="plants__left-filters-price-inputs-block">
-                            <label for="price1">Цена от: </label>
-                            <input v-model="minPrice" id="price1" class="plants__left-filters-price-inputs-block-input" placeholder="минимум" type="number">
+                            <label for="price1">Price from: </label>
+                            <input v-model="minPrice" id="price1" class="plants__left-filters-price-inputs-block-input" placeholder="min" type="number">
                         </div>
                         <div class="plants__left-filters-price-inputs-block">
-                            <label for="price2">Цена до: </label>
-                            <input v-model="maxPrice" id="price2" class="plants__left-filters-price-inputs-block-input" placeholder="максимум" type="number">
+                            <label for="price2">Price to: </label>
+                            <input v-model="maxPrice" id="price2" class="plants__left-filters-price-inputs-block-input" placeholder="max" type="number">
                         </div>
                     </div>
-                    <!-- <button @click.prevent="filter" class="plants__left-filters-price-button">Filter</button> -->
                 </form>
             </div>
             <img class="plants__left-img" src="../assets/icons/SuperSaleBanner.png" alt="">
@@ -168,22 +167,28 @@
                         flex-direction: column;
                         gap: 0.25rem;
 
-                        &-block-input{
-                            -moz-appearance: textfield;
-                            border: none;
-                            border-bottom: 1px solid #000;
+                        &-block{
+                            display: flex;
+                            gap: 1rem;
+                            justify-content: space-between;
 
-                            &::-webkit-inner-spin-button, ::-webkit-outer-spin-button{
-                                -webkit-appearance: none;
-                                margin: 0;
-                            }
+                            &-input{
+                                -moz-appearance: textfield;
+                                border: none;
+                                border-bottom: 1px solid #000;
 
-                            &::-ms-clear{
-                                display: none;
-                            }
+                                &::-webkit-inner-spin-button, ::-webkit-outer-spin-button{
+                                    -webkit-appearance: none;
+                                    margin: 0;
+                                }
 
-                            &:focus{
-                                outline: none;
+                                &::-ms-clear{
+                                    display: none;
+                                }
+
+                                &:focus{
+                                    outline: none;
+                                }
                             }
                         }
                     }

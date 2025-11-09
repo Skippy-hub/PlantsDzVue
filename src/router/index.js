@@ -27,7 +27,20 @@ const router = createRouter({
       name: 'card',
       component: () => import('../views/ShopCard.vue'),
     },
+    {
+      path: '/shop/shoping-cart',
+      name: 'cart',
+      component: () => import('../views/ShopingCart.vue'),
+    },
   ],
+
+  scrollBehavior(to, from, savedPosition) {
+    if (savedPosition) {
+      return savedPosition;
+    } else {
+      return { x: 0, y: 0 };
+    }
+  }
 })
 
 export default router

@@ -1,5 +1,5 @@
 <script setup>
-
+    import { RouterLink } from 'vue-router';
 </script>
 
 <template>
@@ -8,7 +8,7 @@
             <h4 class="hero__content-subtitle">Welcome to GreenShop</h4>
             <h1 class="hero__content-title">Let’s Make a Better <span class="hero__content-title--green">Planet</span></h1>
             <p class="hero__content-text">We are an online plant shop offering a wide range of cheap and trendy plants. Use our plants to create an unique Urban Jungle. Order your favorite plants!</p>
-            <button class="hero__content-button">SHOP NOW</button>
+            <RouterLink to="/shop" class="hero__content-button">SHOP NOW</RouterLink>
         </div>
         <img class="hero__img" src="../assets/icons/HeroImg.png" alt="">
     </section>
@@ -80,7 +80,7 @@
                 border: transparent;
                 background: #46A358;
                 border-radius: 0.375rem;
-                cursor: pointer;
+                text-decoration: none;
             }
         }
 

@@ -1,29 +1,25 @@
 <script setup>
     import { useRoute } from 'vue-router';
-    import { ref, onMounted, toRaw } from 'vue';
-    //toRaw - снимает обёртку proxy (не пригодилось)
+    import { ref, onMounted } from 'vue';
+    import { useCardsStore } from '@/stores/useCardsStore';
+    import { cardsToCart } from '@/stores/cardsToCart';
+
+    const cardsStore = useCardsStore();
+    const cardToCart = cardsToCart();
 
     const route = useRoute();
     const id = route.params.id;
 
     const count = ref(1);
 
-    const img = ref();
-    const title = ref();
-    const price = ref();
-    const category = ref();
-    const size = ref(); 
     let card;
+    const cardData = ref();
 
     async function plants() {
         const response = await fetch('../../Plants.json');
         const data = await response.json();
-        card = data.filter((card) => card.id == id);
-        title.value = card[0].title;
-        img.value = card[0].image;
-        price.value = card[0].price;
-        category.value = card[0].category;
-        size.value = card[0].size;
+        card = data.filter((card) => card.id == +id);
+        cardData.value = card[0];
     }
     
     onMounted(() => {
@@ -37,20 +33,28 @@
             return;
         }
     }
+
+    function favourite(){
+        cardsStore.addToFavourite(+id);
+    }
+
+    function toCart(){
+        cardToCart.addToCart(+id, count.value, cardData.value.title, cardData.value.price, cardData.value.image);
+    }
 </script>
 
 <template>
     <section class="shopCard">
-        <img class="shopCard__img" :src="img" alt="">
+        <img class="shopCard__img" :src="cardData?.image" alt="">
         <div class="shopCard__specification">
             <div  class="shopCard__specification-header">
-                <h1 class="shopCard__specification-header-title">{{ title }}</h1>
-                <p class="shopCard__specification-header-price">${{ price }}</p>
+                <h1 class="shopCard__specification-header-title">{{ cardData?.title }}</h1>
+                <p class="shopCard__specification-header-price">${{ cardData?.price }}</p>
             </div>
             <div class="shopCard__specification-descriptuon">
                 <h4 class="shopCard__specification-description-title">Short description:</h4>
                 <p class="shopCard__specification-description-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Atque adipisci eaque soluta quaerat a dolorem omnis aut, ipsa provident est. Quisquam, non nam. A cum commodi rerum quaerat vitae? Molestiae.</p>
-                <p class="shopCard__specification-description-text"><span class="shopCard__specification-description-text-size">Size:</span> {{ size }}</p>
+                <p class="shopCard__specification-description-text"><span class="shopCard__specification-description-text-size">Size:</span> {{ cardData?.size }}</p>
             </div>
             <div class="shopCard__specification-cart">
                 <div class="shopCard__specification-cart-count">
@@ -60,12 +64,12 @@
                 </div>
                 <div class="shopCard__specification-cart-buttons">
                     <button class="shopCard__specification-cart-buttons-button btn">buy now</button>
-                    <button class="shopCard__specification-cart-buttons-button btn">add to cart</button>
-                    <button class="shopCard__specification-cart-buttons-button btn">favorites</button>
+                    <button @click="toCart" :class="{'cart': cardToCart.isCardInCart(+id)}" class="shopCard__specification-cart-buttons-button btn">add to cart</button>
+                    <button @click="favourite" :class="{'favourite': cardsStore.isFavouriteCard(+id)}" class="shopCard__specification-cart-buttons-button btn">favourites</button>
                 </div>
             </div>
             <div class="shopCard__specification-tags">
-                <p class="shopCard__specification-tags-text"><span class="shopCard__specification-tags-text-bold">Category:</span> {{ category }}</p>
+                <p class="shopCard__specification-tags-text"><span class="shopCard__specification-tags-text-bold">Category:</span> {{ cardData?.category }}</p>
                 <p class="shopCard__specification-tags-text"><span class="shopCard__specification-tags-text-bold">Tags:</span> Home, Garden, Plants</p>
             </div>
         </div>
@@ -196,5 +200,13 @@
                 }
             }
         }
+    }
+
+    .favourite{
+        color: #f00;
+    }
+
+    .cart{
+        color: #1d05f1;
     }
 </style>
