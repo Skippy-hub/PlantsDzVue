@@ -1,8 +1,9 @@
-<script setup>
+<script setup lang="ts">
     import { useRoute } from 'vue-router';
     import { ref, onMounted } from 'vue';
-    import { useCardsStore } from '@/stores/useCardsStore';
-    import { cardsToCart } from '@/stores/cardsToCart';
+    import { useCardsStore } from '../stores/useCardsStore';
+    import { cardsToCart } from '../stores/cardsToCart';
+    import { CardType } from '../types';
 
     const cardsStore = useCardsStore();
     const cardToCart = cardsToCart();
@@ -10,15 +11,17 @@
     const route = useRoute();
     const id = route.params.id;
 
-    const count = ref(1);
+    const count = ref<number>(cardCount(+id) || 1);
 
-    let card;
-    const cardData = ref();
+    
+    let card:CardType[];
+    const cardData = ref<CardType>();
 
+    
     async function plants() {
         const response = await fetch('../../Plants.json');
         const data = await response.json();
-        card = data.filter((card) => card.id == +id);
+        card = data.filter((card:CardType) => card.id == +id);
         cardData.value = card[0];
     }
     
@@ -26,12 +29,18 @@
         plants();
     });
 
-    function decrement(value){
-        if(value > 1){
+    function decrement(){
+        if(count.value > 1){
             count.value--;
+            cardToCart.changeCount(+id, count.value);
         }else{
             return;
         }
+    }
+
+    function increment(){
+        count.value++;
+        cardToCart.changeCount(+id, count.value);
     }
 
     function favourite(){
@@ -39,7 +48,20 @@
     }
 
     function toCart(){
-        cardToCart.addToCart(+id, count.value, cardData.value.title, cardData.value.price, cardData.value.image);
+        cardToCart.addToCart(+id, count.value, cardData.value!.title, cardData.value!.price, cardData.value!.image);
+    }
+
+    function display(){
+        if(cardToCart.isCardInCart(+id)){
+            return "flex";
+        } else{
+            return "none";
+        }
+    }
+
+    function cardCount(id:number){
+        const valueCard = cardToCart.cardsCountArr.find((value) => value.id == id);
+        return valueCard?.count;
     }
 </script>
 
@@ -57,14 +79,14 @@
                 <p class="shopCard__specification-description-text"><span class="shopCard__specification-description-text-size">Size:</span> {{ cardData?.size }}</p>
             </div>
             <div class="shopCard__specification-cart">
-                <div class="shopCard__specification-cart-count">
-                    <button class="shopCard__specification-cart-count-button btn" @click="decrement(count)">-</button>
-                    <p class="shopCard__specification-cart-count-text">{{ count }}</p>
-                    <button class="shopCard__specification-cart-count-button btn" @click="count++">+</button>
+                <div class="shopCard__specification-cart-count" :style="{display: `${display()}`}">
+                    <button class="shopCard__specification-cart-count-button btn padding" @click="decrement()">-</button>
+                    <p class="shopCard__specification-cart-count-text">{{ cardCount(+id) }}</p>
+                    <button class="shopCard__specification-cart-count-button btn" @click="increment()">+</button>
                 </div>
                 <div class="shopCard__specification-cart-buttons">
                     <button class="shopCard__specification-cart-buttons-button btn">buy now</button>
-                    <button @click="toCart" :class="{'cart': cardToCart.isCardInCart(+id)}" class="shopCard__specification-cart-buttons-button btn">add to cart</button>
+                    <button @click="toCart" :class="{'cart': cardToCart.isCardInCart(+id)}" class="shopCard__specification-cart-buttons-button btn">{{cardToCart.isCardInCart(+id) ? "remove" : "add to cart"}}</button>
                     <button @click="favourite" :class="{'favourite': cardsStore.isFavouriteCard(+id)}" class="shopCard__specification-cart-buttons-button btn">favourites</button>
                 </div>
             </div>
@@ -154,7 +176,6 @@
                 
                 &-count{
                     align-items: center;
-                    display: flex;
                     max-width: 7.5rem;
                     width: 100%;
                     justify-content: space-between;
@@ -208,5 +229,9 @@
 
     .cart{
         color: #1d05f1;
+    }
+
+    .padding{
+        padding: 7px 10px 13px;
     }
 </style>

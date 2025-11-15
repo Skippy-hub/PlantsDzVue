@@ -4,9 +4,9 @@ import { ref } from 'vue';
 export const useCardsStore = defineStore('cards', () => {
     const favourites = ref(getFavouritesImmediately());
 
-    function addToFavourite(id){
-        if (favourites.value.find((value) => value == id)){
-            favourites.value = favourites.value.filter((value) => value != id);
+    function addToFavourite(id:number){
+        if (favourites.value.find((value:number) => value == id)){
+            favourites.value = favourites.value.filter((value:number) => value != id);
         } else{
             favourites.value.push(id);
         }
@@ -19,10 +19,10 @@ export const useCardsStore = defineStore('cards', () => {
     }
 
     function getFavouritesImmediately(){
-        return JSON.parse(localStorage.getItem('favourites')) || [];
+        return JSON.parse(localStorage.getItem('favourites') || '') || [];
     }
 
-    function isFavouriteCard(id){
+    function isFavouriteCard(id:number){
         return favourites.value.includes(id);
     }
 

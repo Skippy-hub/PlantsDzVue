@@ -1,7 +1,7 @@
 <script setup>
     import { RouterLink } from 'vue-router';
-    import { cardsToCart } from '@/stores/cardsToCart';
-    import { useCardsStore } from '@/stores/useCardsStore';
+    import { cardsToCart } from '../stores/cardsToCart';
+    import { useCardsStore } from '../stores/useCardsStore';
     
     const cardToCart = cardsToCart();
     const cardsStore = useCardsStore();

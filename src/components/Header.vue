@@ -1,6 +1,6 @@
 <script setup>
     import { RouterLink } from 'vue-router';
-    import { cardsToCart } from '@/stores/cardsToCart';
+    import { cardsToCart } from '../stores/cardsToCart';
 
     const cardToCart = cardsToCart();
 </script>

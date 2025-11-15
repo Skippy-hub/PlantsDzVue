@@ -1,42 +1,9 @@
-<script setup>
+<script setup lang="ts">
     import { RouterLink } from 'vue-router';
-    import CartCards from '@/components/CartCards.vue';
-    import { cardsToCart } from '@/stores/cardsToCart';
-    import { computed, ref } from 'vue';
+    import CartCard from '../components/CartCard.vue';
+    import { cardsToCart } from '../stores/cardsToCart';
 
     const cardToCart = cardsToCart();
-
-    const discount = ref(0);
-
-    const discountFixed = computed(() => {
-        if(discount.value || discount.value === 0){
-            return discount.value.toFixed(2);
-        } else{
-            return discount.value = 0;
-        }
-    });
-
-    function total(){
-        let result = 0;
-        
-        if (cardToCart.cardsCountArr.length){
-            for(const card of cardToCart.cardsCountArr){
-                result += card.count * card.price;
-            }
-        }
-
-        return result.toFixed(2);
-    }
-
-    const totalPrice = ref(0);
-
-    const finalPrice = computed(() => {
-        if ((total() - discount.value) < 0 || null || undefined){
-            return totalPrice.value = 0;
-        } else{
-            return totalPrice.value = (total() - discount.value).toFixed(2) || 0;
-        }
-    });
 </script>
 
 <template>
@@ -49,9 +16,9 @@
                 <h3 class="cart__left-title-text">Total</h3>
             </div>
             <template v-if="cardToCart.cardsCountArr.length">
-                <CartCards
+                <CartCard
                     v-for="card in cardToCart.cardsCountArr" :key="card.id"
-                    :image="card.image" :title="card.title" :price="card.price" :id="card.id" :count="card.count"
+                    :image="card.image" :title="card.title" :price="card.price" :id="card.id" :count="card.count" :total="card.total"
                 />
             </template>
             <template v-else>
@@ -62,22 +29,22 @@
             <h3 class="cart__right-title">Cart Totals</h3>
             <p class="cart__right-text">Coupon Apply</p>
             <form class="cart__right-form" action="">
-                <input v-model="discount" class="cart__right-form-input" type="number" placeholder="Enter coupon code here...">
+                <input v-model="cardToCart.discount" class="cart__right-form-input" type="number" min="0" placeholder="Enter coupon code here...">
                 <button @click.prevent="" class="cart__right-form-button">Apply</button>
             </form>
             <div class="cart__right-price">
                 <div class="cart__right-price-subtotal">
                     <p class="cart__right-text">Subtotal</p>
-                    <p class="cart__right-price-subtotal-number">${{ total() }}</p>
+                    <p class="cart__right-price-subtotal-number">${{ cardToCart.total().toFixed(2) }}</p>
                 </div>
                 <div class="cart__right-price-discount">
                     <p class="cart__right-text">Coupon Discount</p>
-                    <p class="cart__right-price-discount-number">(-) ${{ discountFixed }}</p>
+                    <p class="cart__right-price-discount-number">(-) ${{ cardToCart.discountFixed }}</p>
                 </div>
             </div>
             <div class="cart__right-total">
                 <p class="cart__right-total-title">Total</p>
-                <p class="cart__right-total-number">${{ finalPrice }}</p>
+                <p class="cart__right-total-number">${{ cardToCart.finalPrice.toFixed(2) }}</p>
             </div>
             <button class="cart__right-checkout">Proceed To Checkout</button>
             <RouterLink to="/shop" class="cart__right-back">Continue Shopping</RouterLink>
