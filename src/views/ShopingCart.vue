@@ -60,6 +60,11 @@
         color: #3d3d3d;
         padding-top: 2.25rem;
         padding-bottom: 5.4375rem;
+
+        @media (max-width: 979px) {
+            flex-direction: column;
+            align-items: center;
+        }
         
         &__left{
             max-width: 48.875rem;
@@ -67,7 +72,9 @@
 
             &-title{
                 border-bottom: 1px solid #46A35850;
-                display: flex;
+                // display: flex;
+                display: grid;
+                grid-template-columns: minmax(100px, 300px) minmax(70px, 160px) minmax(100px, 150px) 80px;
                 padding-bottom: 0.6875rem;
                 margin-bottom: 1rem;
 
@@ -218,17 +225,17 @@
         }
     }
 
-    .mr1{
-        margin-right: 15.3125rem;
-    }
+    // .mr1{
+    //     margin-right: 15.3125rem;
+    // }
 
-    .mr2{
-        margin-right: 6.75rem;
-    }
+    // .mr2{
+    //     margin-right: 6.75rem;
+    // }
 
-    .mr3{
-        margin-right: 6rem;
-    }
+    // .mr3{
+    //     margin-right: 6rem;
+    // }
 
     .blank{
         text-align: center;

@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
     import { RouterLink } from 'vue-router';
     import FooterCard from './FooterCard.vue';
     import pineappleImg from '../assets/icons/pineapple.svg';

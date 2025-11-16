@@ -66,7 +66,10 @@
     }
 
     .card{
-        display: flex;
+        // display: flex;
+        display: grid;
+        grid-template-columns: minmax(80px, 270px) minmax(50px, 140px) minmax(70px, 130px) auto auto;
+        gap: 1rem;
         align-items: center;
         text-align: center;
         margin-bottom: 0.5rem;
@@ -76,11 +79,15 @@
             align-items: center;
             max-width: 15rem;
             width: 100%;
-            margin-right: 3.5rem;
+            // margin-right: 3.5rem;
 
             &-img{
                 width: 4.375rem;
                 height: 4.375rem;
+
+                @media (max-width: 480px) {
+                    display: none;
+                }
             }
 
             &-title{
@@ -88,6 +95,11 @@
                 font-size: 1rem;
                 line-height: 100%;
                 color: #3d3d3d;
+
+                @media (max-width: 480px) {
+                    text-align-last: left;
+                    font-size: 0.75rem;
+                }
             }
         }
 
@@ -95,16 +107,20 @@
             color: #727272;
             font-size: 1rem;
             line-height: 100%;
-            margin-right: 5rem;
+            // margin-right: 5rem;
             max-width: 3.75rem;
             width: 100%;
+
+            @media (max-width: 480px) {
+                font-size: 0.75rem;
+            }
         }
 
         &__count{
             display: flex;
             align-items: center;
             gap: 1rem;
-            margin-right: 2.5rem;
+            // margin-right: 2.5rem;
             max-width: 7.125rem;
             width: 100%;
             
@@ -112,6 +128,10 @@
                 color: #3d3d3d;
                 font-size: 1rem;
                 line-height: 100%;
+                
+                @media (max-width: 480px) {
+                    font-size: 0.75rem;
+                }
             }
 
             &-button{
@@ -119,9 +139,15 @@
                 line-height: 57%;
                 padding: 0.625rem;
                 border-radius: 2rem;
-                max-width: 2.25rem;
-                width: 100%;
+                width: 2.25rem;
+                height: 2.25rem;
 
+                @media (max-width: 480px) {
+                    width: 1.25rem;
+                    height: 1.25rem;
+                    font-size: 1.25rem;
+                    padding: 0;
+                }
             }
         }
         
@@ -132,17 +158,29 @@
             font-size: 1rem;
             line-height: 100%;
             font-weight: 700;
-            margin-right: 3rem;
+            // margin-right: 3rem;
+
+            @media (max-width: 480px) {
+                font-size: 0.75rem;
+            }
         }
 
         &__delete{
             max-width: 2rem;
             width: 100%;
             cursor: pointer;
+
+            @media (max-width: 480px) {
+                width: 1.5rem;
+            }
         }
     }
     
     .padding{
         padding: 7px 10px 13px;
+
+        @media (max-width:480px) {
+            padding: 0;
+        }
     }
 </style>

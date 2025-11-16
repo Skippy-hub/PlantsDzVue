@@ -1,17 +1,18 @@
-<script setup>
+<script setup lang="ts">
     import { ref, onMounted, computed } from 'vue';
-    import CardsPlants from '@/components/CardsPlants.vue';
+    import CardsPlants from '../components/CardsPlants.vue';
+    import { CardType } from '../types';
 
 
-    const cards = ref([]);
-    const size = ref('all');
+    const cards = ref<CardType[]>();
+    const size = ref<string>('all');
 
-    const minPrice = ref();
-    const maxPrice = ref();
+    const minPrice = ref<string>();
+    const maxPrice = ref<string>();
 
     async function plants() {
         const response = await fetch('../../Plants.json');
-        const data = await response.json();
+        const data:CardType[] = await response.json();
         cards.value = data;
     }
 
@@ -23,7 +24,7 @@
         if(size.value == 'all'){
             return cards.value;
         }else{
-            return cards.value.filter((card) => card.size == size.value);
+            return cards.value!.filter((card) => card.size == size.value);
         }
     });
 </script>

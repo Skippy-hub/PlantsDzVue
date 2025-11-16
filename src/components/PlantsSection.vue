@@ -1,16 +1,17 @@
-<script setup>
+<script setup lang="ts">
     import CardsPlants from './CardsPlants.vue';
     import { onMounted, ref } from 'vue';
+    import { CardType } from '../types';
 
-    const minPrice = ref();
-    const maxPrice = ref();
+    const minPrice = ref<string>();
+    const maxPrice = ref<string>();
 
-    const cards = ref([]);
-    const result = ref();
+    const cards = ref<CardType[]>();
+    const result = ref<CardType[]>();
 
     async function plants() {
         const response = await fetch('../../Plants.json');
-        const data = await response.json();
+        const data:CardType[] = await response.json();
         cards.value = data;
         result.value = cards.value;
     }
@@ -19,13 +20,15 @@
         plants();
     });
     
-    function countPlant(value){
+    function countPlant(value:string){
         let count = 0;
-        for(let i = 0; i < cards.value.length; i++){
-            if(cards.value[i].size == value){
-                count++;
-            }else if(value == "all"){
-                return cards.value.length;
+        if(cards.value){
+            for(let i = 0; i < (cards.value!.length); i++){
+                if(cards.value![i].size == value){
+                    count++;
+                }else if(value == "all"){
+                    return cards.value!.length;
+                }
             }
         }
         return count;
@@ -33,13 +36,13 @@
 
     const isActive = ref('all');
 
-    function filterPlants(value){
+    function filterPlants(value:string){
         if(value == 'all'){
             isActive.value = value;
             result.value = cards.value;
         }else{
             isActive.value = value;
-            result.value = cards.value.filter((card) => card.size == value);
+            result.value = cards.value!.filter((card) => card.size == value);
         }
     }
 </script>
@@ -52,19 +55,19 @@
                 <div class="plants__left-filters-size">
                     <div @click="filterPlants('all')" :class="{'active': isActive == 'all'}" class="plants__left-filters-size-block">
                         <p class="plants__left-filters-size-text">All</p>
-                        <p class="plants__left-filters-size-text plants__left-filters-size-text--count">{{ countPlant("all") }}</p>
+                        <p class="plants__left-filters-size-text plants__left-filters-size-text--count">{{ countPlant("all") || 0 }}</p>
                     </div>
                     <div @click="filterPlants('small')" :class="{'active': isActive == 'small'}" class="plants__left-filters-size-block">
                         <p class="plants__left-filters-size-text">Small</p>
-                        <p class="plants__left-filters-size-text plants__left-filters-size-text--count">{{ countPlant("small") }}</p>
+                        <p class="plants__left-filters-size-text plants__left-filters-size-text--count">{{ countPlant("small") || 0 }}</p>
                     </div>
                     <div @click="filterPlants('medium')" :class="{'active': isActive == 'medium'}" class="plants__left-filters-size-block">
                         <p class="plants__left-filters-size-text">Medium</p>
-                        <p class="plants__left-filters-size-text plants__left-filters-size-text--count">{{ countPlant("medium") }}</p>
+                        <p class="plants__left-filters-size-text plants__left-filters-size-text--count">{{ countPlant("medium") || 0 }}</p>
                     </div>
                     <div @click="filterPlants('large')" :class="{'active': isActive == 'large'}" class="plants__left-filters-size-block">
                         <p class="plants__left-filters-size-text">Large</p>
-                        <p class="plants__left-filters-size-text plants__left-filters-size-text--count">{{ countPlant("large") }}</p>
+                        <p class="plants__left-filters-size-text plants__left-filters-size-text--count">{{ countPlant("large") || 0 }}</p>
                     </div>
                 </div>
                 <form class="plants__left-filters-price" action="">
