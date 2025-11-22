@@ -2,7 +2,7 @@ import { defineStore } from 'pinia';
 import { computed, ref } from 'vue';
 import { CardType } from '../types';
 
-export const cardsToCart = defineStore('cart', () => {
+export const useCartStore = defineStore('cart', () => { //Заменить на useCartStore
     const cardsCountArr = ref<CardType[]>(getCartImmediately());
     
     const cartCount = computed<number>(() => {
@@ -28,7 +28,7 @@ export const cardsToCart = defineStore('cart', () => {
     }
 
     function getCartImmediately(){
-        return JSON.parse(localStorage.getItem('cardsCountArr') || '') || [];
+        return JSON.parse(localStorage.getItem('cardsCountArr') || '[]');
     }
 
     function saveCart(){

@@ -1,6 +1,6 @@
 <script setup lang="ts">
     import { ref, onMounted, computed } from 'vue';
-    import CardsPlants from '../components/CardsPlants.vue';
+    import CardPlant from '../components/CardPlant.vue';
     import { CardType } from '../types';
 
 
@@ -55,7 +55,7 @@
         <div class="shop__cards">
             <template v-for="card in filterSize" :key="card.id">
                 <template v-if="(!minPrice || card.price >= minPrice) && (!maxPrice || card.price <= maxPrice)">
-                    <CardsPlants
+                    <CardPlant
                     :key = "card.id"
                     :image="card.image" :title="card.title" :price="card.price" :id="card.id"
                     />

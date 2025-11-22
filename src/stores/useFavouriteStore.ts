@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
 
-export const useCardsStore = defineStore('cards', () => {
+export const useFavouriteStore = defineStore('cards', () => {
     const favourites = ref(getFavouritesImmediately());
 
     function addToFavourite(id:number){
@@ -19,7 +19,7 @@ export const useCardsStore = defineStore('cards', () => {
     }
 
     function getFavouritesImmediately(){
-        return JSON.parse(localStorage.getItem('favourites') || '') || [];
+        return JSON.parse(localStorage.getItem('favourites') || '[]');
     }
 
     function isFavouriteCard(id:number){

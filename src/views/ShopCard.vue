@@ -1,12 +1,12 @@
 <script setup lang="ts">
     import { useRoute } from 'vue-router';
     import { ref, onMounted } from 'vue';
-    import { useCardsStore } from '../stores/useCardsStore';
-    import { cardsToCart } from '../stores/cardsToCart';
+    import { useFavouriteStore } from '../stores/useFavouriteStore';
+    import { useCartStore } from '../stores/useCartStore';
     import { CardType } from '../types';
 
-    const cardsStore = useCardsStore();
-    const cardToCart = cardsToCart();
+    const favouriteStore = useFavouriteStore();
+    const cartStore = useCartStore();
 
     const route = useRoute();
     const id = route.params.id;
@@ -32,7 +32,7 @@
     function decrement(){
         if(count.value > 1){
             count.value--;
-            cardToCart.changeCount(+id, count.value);
+            cartStore.changeCount(+id, count.value);
         }else{
             return;
         }
@@ -40,27 +40,28 @@
 
     function increment(){
         count.value++;
-        cardToCart.changeCount(+id, count.value);
+        cartStore.changeCount(+id, count.value);
     }
 
     function favourite(){
-        cardsStore.addToFavourite(+id);
+        favouriteStore.addToFavourite(+id);
     }
 
     function toCart(){
-        cardToCart.addToCart(+id, count.value, cardData.value!.title, cardData.value!.price, cardData.value!.image);
+        cartStore.addToCart(+id, count.value, cardData.value!.title, cardData.value!.price, cardData.value!.image);
     }
 
     function display(){
-        if(cardToCart.isCardInCart(+id)){
+        if(cartStore.isCardInCart(+id)){
             return "flex";
         } else{
+            count.value = 1;
             return "none";
         }
     }
 
     function cardCount(id:number){
-        const valueCard = cardToCart.cardsCountArr.find((value) => value.id == id);
+        const valueCard = cartStore.cardsCountArr.find((value) => value.id == id);
         return valueCard?.count;
     }
 </script>
@@ -86,8 +87,8 @@
                 </div>
                 <div class="shopCard__specification-cart-buttons">
                     <button class="shopCard__specification-cart-buttons-button btn">buy now</button>
-                    <button @click="toCart" :class="{'cart': cardToCart.isCardInCart(+id)}" class="shopCard__specification-cart-buttons-button btn">{{cardToCart.isCardInCart(+id) ? "remove" : "add to cart"}}</button>
-                    <button @click="favourite" :class="{'favourite': cardsStore.isFavouriteCard(+id)}" class="shopCard__specification-cart-buttons-button btn">favourites</button>
+                    <button @click="toCart" :class="{'cart': cartStore.isCardInCart(+id)}" class="shopCard__specification-cart-buttons-button btn">{{cartStore.isCardInCart(+id) ? "remove" : "add to cart"}}</button>
+                    <button @click="favourite" :class="{'favourite': favouriteStore.isFavouriteCard(+id)}" class="shopCard__specification-cart-buttons-button btn">favourites</button>
                 </div>
             </div>
             <div class="shopCard__specification-tags">
@@ -228,7 +229,7 @@
     }
 
     .cart{
-        color: #1d05f1;
+        color: #f00;
     }
 
     .padding{

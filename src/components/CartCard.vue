@@ -1,24 +1,26 @@
 <script setup lang="ts">
-    import { cardsToCart } from '../stores/cardsToCart';
+    import { useCartStore } from '../stores/useCartStore';
     import { ref } from 'vue';
 
-    const cardToCart = cardsToCart();
+    const cartStore = useCartStore();
 
-    const props = defineProps({
-        image: String,
-        title: String,
-        price: String,
-        count: Number,
-        id: Number,
-        total: Number,
-    });
+    interface Props {
+        image: string;
+        title: string;
+        price: string;
+        count: number;
+        id: number;
+        total: number;
+    }
 
-    const count = ref<number>(props.count || 0);
+    const props = defineProps<Props>();
+
+    const count = ref<number>(props.count!);
 
     function decrement(){
         if(count.value > 1){
             count.value--;
-            cardToCart.changeCount(props.id || 0, count.value);
+            cartStore.changeCount(props.id!, count.value);
         }else{
             return;
         }
@@ -26,7 +28,7 @@
 
     function increment(){
         count.value++;
-        cardToCart.changeCount(props.id || 0, count.value);
+        cartStore.changeCount(props.id!, count.value);
     }
 </script>
 
@@ -42,8 +44,8 @@
             <p class="card__count-text">{{ props.count }}</p>
             <button @click="increment()" class="card__count-button btn">+</button>
         </div>
-        <p class="card__fullPrice">${{ (props.total || 0).toFixed(2) }}</p>
-        <svg @click="cardToCart.removeToCart(props.id || 0)" class="card__delete" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <p class="card__fullPrice">${{ (props.total!).toFixed(2) }}</p>
+        <svg @click="cartStore.removeToCart(props.id!)" class="card__delete" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <g id="Iconly/Curved/Delete">
                 <g id="Delete">
                     <path id="Stroke 1" d="M18.8892 9.55408C18.8892 17.5731 20.0435 21.1979 12.2797 21.1979C4.5149 21.1979 5.693 17.5731 5.693 9.55408" stroke="#727272" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>

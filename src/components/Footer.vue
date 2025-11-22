@@ -1,9 +1,9 @@
 <script setup lang="ts">
     import { RouterLink } from 'vue-router';
     import FooterCard from './FooterCard.vue';
-    import pineappleImg from '../assets/icons/pineapple.svg';
-    import teaImg from '../assets/icons/tea.svg';
-    import cactusImg from '../assets/icons/cactus.svg';
+    import pineappleImg from '../assets/pineapple.svg';
+    import teaImg from '../assets/tea.svg';
+    import cactusImg from '../assets/cactus.svg';
 
     const cards = [
         {
@@ -45,7 +45,7 @@
             </div>
         </div>
         <div class="footer__middle">
-            <RouterLink to="/"><img class="footer__middle-img" src="../assets/icons/Logo.svg" alt=""></img></RouterLink>
+            <RouterLink to="/"><img class="footer__middle-img" src="../assets/Logo.svg" alt=""></img></RouterLink>
             <p class="footer__middle-text">70 West Buckingham Ave.<br>Farmingdale, NY 11735</p>
             <a class="footer__middle-text"  href="mailto: mail@gmail.com">contact@greenshop.com</a>
             <a class="footer__middle-text" href="tel:+7777777">+88 01911 717 490</a>

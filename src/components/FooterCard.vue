@@ -1,9 +1,12 @@
 <script setup lang="ts">
-    const props = defineProps({
-        image: String,
-        title: String,
-        description: String,
-    });
+    
+    interface Props {
+        image: string;
+        title: string;
+        description: string;
+    }
+
+    const props = defineProps<Props>();
 </script>
 
 <template>

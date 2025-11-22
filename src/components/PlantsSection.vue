@@ -1,5 +1,5 @@
 <script setup lang="ts">
-    import CardsPlants from './CardsPlants.vue';
+    import CardPlant from './CardPlant.vue';
     import { onMounted, ref } from 'vue';
     import { CardType } from '../types';
 
@@ -55,19 +55,19 @@
                 <div class="plants__left-filters-size">
                     <div @click="filterPlants('all')" :class="{'active': isActive == 'all'}" class="plants__left-filters-size-block">
                         <p class="plants__left-filters-size-text">All</p>
-                        <p class="plants__left-filters-size-text plants__left-filters-size-text--count">{{ countPlant("all") || 0 }}</p>
+                        <p class="plants__left-filters-size-text plants__left-filters-size-text--count">{{ countPlant("all") }}</p>
                     </div>
                     <div @click="filterPlants('small')" :class="{'active': isActive == 'small'}" class="plants__left-filters-size-block">
                         <p class="plants__left-filters-size-text">Small</p>
-                        <p class="plants__left-filters-size-text plants__left-filters-size-text--count">{{ countPlant("small") || 0 }}</p>
+                        <p class="plants__left-filters-size-text plants__left-filters-size-text--count">{{ countPlant("small") }}</p>
                     </div>
                     <div @click="filterPlants('medium')" :class="{'active': isActive == 'medium'}" class="plants__left-filters-size-block">
                         <p class="plants__left-filters-size-text">Medium</p>
-                        <p class="plants__left-filters-size-text plants__left-filters-size-text--count">{{ countPlant("medium") || 0 }}</p>
+                        <p class="plants__left-filters-size-text plants__left-filters-size-text--count">{{ countPlant("medium") }}</p>
                     </div>
                     <div @click="filterPlants('large')" :class="{'active': isActive == 'large'}" class="plants__left-filters-size-block">
                         <p class="plants__left-filters-size-text">Large</p>
-                        <p class="plants__left-filters-size-text plants__left-filters-size-text--count">{{ countPlant("large") || 0 }}</p>
+                        <p class="plants__left-filters-size-text plants__left-filters-size-text--count">{{ countPlant("large") }}</p>
                     </div>
                 </div>
                 <form class="plants__left-filters-price" action="">
@@ -83,12 +83,12 @@
                     </div>
                 </form>
             </div>
-            <img class="plants__left-img" src="../assets/icons/SuperSaleBanner.png" alt="">
+            <img class="plants__left-img" src="../assets/SuperSaleBanner.png" alt="">
         </div>
         <div class="plants__cards">
             <template v-for="card in result" :key="card.id">
                 <template v-if="(!minPrice || card.price >= minPrice) && (!maxPrice || card.price <= maxPrice)">
-                    <CardsPlants
+                    <CardPlant
                     :key = "card.id"
                     :image="card.image" :title="card.title" :price="card.price" :id="card.id"
                     />

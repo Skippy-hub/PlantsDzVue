@@ -1,7 +1,7 @@
 [
     {
         "id": 1,
-        "image": "/src/assets/icons/plant1.png",
+        "image": "/src/assets/plant1.png",
         "title": "Barberton Daisy",
         "price": "119.00",
         "size": "large",
@@ -9,7 +9,7 @@
     },
     {
         "id": 2,
-        "image": "/src/assets/icons/plant2.png",
+        "image": "/src/assets/plant2.png",
         "title": "Angel Wing Begonia",
         "price": "169.00",
         "size": "medium",
@@ -17,7 +17,7 @@
     },
     {
         "id": 3,
-        "image": "/src/assets/icons/plant3.png",
+        "image": "/src/assets/plant3.png",
         "title": "African Violet",
         "price": "199.00",
         "size": "small",
@@ -25,7 +25,7 @@
     },
     {
         "id": 4,
-        "image": "/src/assets/icons/plant4.png",
+        "image": "/src/assets/plant4.png",
         "title": "Beach Spider Lily",
         "price": "129.00",
         "size": "large",
@@ -33,7 +33,7 @@
     },
     {
         "id": 5,
-        "image": "/src/assets/icons/plant5.png",
+        "image": "/src/assets/plant5.png",
         "title": "Blushing Bromeliad",
         "price": "139.00",
         "size": "medium",
@@ -41,7 +41,7 @@
     },
     {
         "id": 6,
-        "image": "/src/assets/icons/plant6.png",
+        "image": "/src/assets/plant6.png",
         "title": "Aluminum Plant",
         "price": "179.00",
         "size": "small",
@@ -49,7 +49,7 @@
     },
     {
         "id": 7,
-        "image": "/src/assets/icons/plant7.png",
+        "image": "/src/assets/plant7.png",
         "title": "Bird's Nest Fern",
         "price": "99.00",
         "size": "small",
@@ -57,7 +57,7 @@
     },
     {
         "id": 8,
-        "image": "/src/assets/icons/plant8.png",
+        "image": "/src/assets/plant8.png",
         "title": "Broadleaf Lady Palm",
         "price": "59.00",
         "size": "medium",
@@ -65,7 +65,7 @@
     },
     {
         "id": 9,
-        "image": "/src/assets/icons/plant9.png",
+        "image": "/src/assets/plant9.png",
         "title": "Chinese Evergreen",
         "price": "39.00",
         "size": "small",

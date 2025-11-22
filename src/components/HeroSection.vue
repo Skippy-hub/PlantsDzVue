@@ -10,14 +10,14 @@
             <p class="hero__content-text">We are an online plant shop offering a wide range of cheap and trendy plants. Use our plants to create an unique Urban Jungle. Order your favorite plants!</p>
             <RouterLink to="/shop" class="hero__content-button">SHOP NOW</RouterLink>
         </div>
-        <img class="hero__img" src="../assets/icons/HeroImg.png" alt="">
+        <img class="hero__img" src="../assets/HeroImg.png" alt="">
     </section>
 </template>
 
 <style lang="scss" scoped>
     .hero{
         background: #F5F5F5;
-        padding: 0 2.5rem;
+        padding: 1.5rem 2.5rem;
         display: flex;
         justify-content: space-between;
         gap: 1rem;
