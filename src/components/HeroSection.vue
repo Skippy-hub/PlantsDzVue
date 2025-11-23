@@ -24,6 +24,10 @@
         align-items: center;
         margin-bottom: 2rem;
 
+        @media (max-width: 767px) {
+            justify-content: center;;
+        }
+
         &__content{
             max-width: 34.8125rem;
             width: 100%;

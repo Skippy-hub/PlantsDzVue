@@ -2,14 +2,18 @@ import { defineStore } from 'pinia';
 import { computed, ref } from 'vue';
 import { CardType } from '../types';
 
-export const useCartStore = defineStore('cart', () => { //Заменить на useCartStore
+export const useCartStore = defineStore('cart', () => {
+    const minPrice = ref<string>();
+    const maxPrice = ref<string>();
+    const size = ref<string>('all');
+
     const cardsCountArr = ref<CardType[]>(getCartImmediately());
     
     const cartCount = computed<number>(() => {
         let result:number = 0;
         if(cardsCountArr.value.length){
             for(const card of cardsCountArr.value){
-                result += card.count;
+                result += card.count!;
             }
         }
         return result;
@@ -20,7 +24,7 @@ export const useCartStore = defineStore('cart', () => { //Заменить на 
         
         if (cardsCountArr.value.length){
             for(const card of cardsCountArr.value){
-                result += card.total;
+                result += card.total!;
             }
         }
 
@@ -78,6 +82,23 @@ export const useCartStore = defineStore('cart', () => { //Заменить на 
         }
     });
 
+    const disabled = ref<boolean>(false); //блок инпута discount
+    const applyText = ref<string>('Incorrect value');
+    const display = ref<string>('none');
+    const color = ref<string>('');
+
+    function apply(){   //фнукция блока
+        if (discount.value <= 0){
+            color.value = '#f00';
+            display.value = 'block';
+            return;
+        }
+        disabled.value = true;
+        applyText.value = "Coupon is accepted";
+        color.value = '#46A358';
+        display.value = 'block';
+    }
+
     const totalPrice = ref(0);
 
     const finalPrice = computed(() => {
@@ -96,16 +117,35 @@ export const useCartStore = defineStore('cart', () => { //Заменить на 
         saveCart();
     }
 
+
+    const cards = ref<CardType[]>([]);
+
+    async function getCards() {
+        const response = await fetch('../../Plants.json');
+        const data:CardType[] = await response.json();
+        cards.value = data;
+    }
+
     return {
         addToCart,
         isCardInCart,
         total,
         changeCount,
         removeToCart,
+        getCards,
+        apply,
         cartCount,
         cardsCountArr,
         discount,
         discountFixed,
         finalPrice,
+        cards,
+        disabled,
+        applyText,
+        display,
+        color,
+        minPrice,
+        maxPrice,
+        size,
     }
 });

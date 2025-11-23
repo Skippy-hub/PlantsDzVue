@@ -5,6 +5,6 @@ export interface CardType {
     price: string;
     size?: string;
     category?: string;
-    count: number;
-    total: number;
+    count?: number;
+    total?: number;
 }

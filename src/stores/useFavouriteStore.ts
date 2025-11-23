@@ -1,14 +1,20 @@
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
+import { CardType } from '../types';
 
 export const useFavouriteStore = defineStore('cards', () => {
-    const favourites = ref(getFavouritesImmediately());
+    const favourites = ref<CardType[]>(getFavouritesImmediately());
 
-    function addToFavourite(id:number){
-        if (favourites.value.find((value:number) => value == id)){
-            favourites.value = favourites.value.filter((value:number) => value != id);
+    function addToFavourite(id:number, image:string, title:string, price:string){
+        if (favourites.value.find((value) => value.id == id)){
+            favourites.value = favourites.value.filter((value) => value.id != id);
         } else{
-            favourites.value.push(id);
+            favourites.value.push({
+                id,
+                image,
+                title,
+                price
+            });
         }
 
         saveFavourites();
@@ -23,11 +29,16 @@ export const useFavouriteStore = defineStore('cards', () => {
     }
 
     function isFavouriteCard(id:number){
-        return favourites.value.includes(id);
+        if (favourites.value.find((value) => value.id == id)){
+            return true;
+        }else{
+            return false;
+        }
     }
 
     return {
         addToFavourite,
-        isFavouriteCard
+        isFavouriteCard,
+        favourites
     }
 });

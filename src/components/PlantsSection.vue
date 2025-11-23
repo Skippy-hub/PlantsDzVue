@@ -1,50 +1,38 @@
 <script setup lang="ts">
     import CardPlant from './CardPlant.vue';
-    import { onMounted, ref } from 'vue';
+    import { onMounted, ref, computed } from 'vue';
     import { CardType } from '../types';
-
-    const minPrice = ref<string>();
-    const maxPrice = ref<string>();
-
-    const cards = ref<CardType[]>();
-    const result = ref<CardType[]>();
-
-    async function plants() {
-        const response = await fetch('../../Plants.json');
-        const data:CardType[] = await response.json();
-        cards.value = data;
-        result.value = cards.value;
-    }
+    import { useCartStore } from '../stores/useCartStore';
+    
+    const cartStore = useCartStore();
+    
+    const result = ref<CardType[]>([]);
+    
+    const sortArr = computed(() => {
+        result.value = cartStore.cards;
+        if(cartStore.size == "all") return result.value;
+        return result.value.filter((card) => card.size == cartStore.size);
+    });
     
     onMounted(() => {
-        plants();
+        if (cartStore.cards.length) return;
+        cartStore.getCards();
     });
     
     function countPlant(value:string){
         let count = 0;
-        if(cards.value){
-            for(let i = 0; i < (cards.value!.length); i++){
-                if(cards.value![i].size == value){
+        if(cartStore.cards){
+            for(let i = 0; i < (cartStore.cards.length); i++){
+                if(cartStore.cards[i].size == value){
                     count++;
                 }else if(value == "all"){
-                    return cards.value!.length;
+                    return cartStore.cards.length;
                 }
             }
         }
         return count;
     }
 
-    const isActive = ref('all');
-
-    function filterPlants(value:string){
-        if(value == 'all'){
-            isActive.value = value;
-            result.value = cards.value;
-        }else{
-            isActive.value = value;
-            result.value = cards.value!.filter((card) => card.size == value);
-        }
-    }
 </script>
 
 <template>
@@ -53,19 +41,19 @@
             <div class="plants__left-filters">
                 <h3 class="plants__left-filters-title">Size</h3>
                 <div class="plants__left-filters-size">
-                    <div @click="filterPlants('all')" :class="{'active': isActive == 'all'}" class="plants__left-filters-size-block">
+                    <div @click="cartStore.size = 'all'" :class="{'active': cartStore.size == 'all'}" class="plants__left-filters-size-block">
                         <p class="plants__left-filters-size-text">All</p>
                         <p class="plants__left-filters-size-text plants__left-filters-size-text--count">{{ countPlant("all") }}</p>
                     </div>
-                    <div @click="filterPlants('small')" :class="{'active': isActive == 'small'}" class="plants__left-filters-size-block">
+                    <div @click="cartStore.size = 'small'" :class="{'active': cartStore.size == 'small'}" class="plants__left-filters-size-block">
                         <p class="plants__left-filters-size-text">Small</p>
                         <p class="plants__left-filters-size-text plants__left-filters-size-text--count">{{ countPlant("small") }}</p>
                     </div>
-                    <div @click="filterPlants('medium')" :class="{'active': isActive == 'medium'}" class="plants__left-filters-size-block">
+                    <div @click="cartStore.size = 'medium'" :class="{'active': cartStore.size == 'medium'}" class="plants__left-filters-size-block">
                         <p class="plants__left-filters-size-text">Medium</p>
                         <p class="plants__left-filters-size-text plants__left-filters-size-text--count">{{ countPlant("medium") }}</p>
                     </div>
-                    <div @click="filterPlants('large')" :class="{'active': isActive == 'large'}" class="plants__left-filters-size-block">
+                    <div @click="cartStore.size = 'large'" :class="{'active': cartStore.size == 'large'}" class="plants__left-filters-size-block">
                         <p class="plants__left-filters-size-text">Large</p>
                         <p class="plants__left-filters-size-text plants__left-filters-size-text--count">{{ countPlant("large") }}</p>
                     </div>
@@ -74,11 +62,11 @@
                     <div class="plants__left-filters-price-inputs">
                         <div class="plants__left-filters-price-inputs-block">
                             <label for="price1">Price from: </label>
-                            <input v-model="minPrice" id="price1" class="plants__left-filters-price-inputs-block-input" placeholder="min" type="number">
+                            <input v-model="cartStore.minPrice" id="price1" class="plants__left-filters-price-inputs-block-input" placeholder="min" type="number">
                         </div>
                         <div class="plants__left-filters-price-inputs-block">
                             <label for="price2">Price to: </label>
-                            <input v-model="maxPrice" id="price2" class="plants__left-filters-price-inputs-block-input" placeholder="max" type="number">
+                            <input v-model="cartStore.maxPrice" id="price2" class="plants__left-filters-price-inputs-block-input" placeholder="max" type="number">
                         </div>
                     </div>
                 </form>
@@ -86,8 +74,8 @@
             <img class="plants__left-img" src="../assets/SuperSaleBanner.png" alt="">
         </div>
         <div class="plants__cards">
-            <template v-for="card in result" :key="card.id">
-                <template v-if="(!minPrice || card.price >= minPrice) && (!maxPrice || card.price <= maxPrice)">
+            <template v-for="card in sortArr" :key="card.id">
+                <template v-if="(!cartStore.minPrice || card.price >= cartStore.minPrice) && (!cartStore.maxPrice || card.price <= cartStore.maxPrice)">
                     <CardPlant
                     :key = "card.id"
                     :image="card.image" :title="card.title" :price="card.price" :id="card.id"

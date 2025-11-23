@@ -18,7 +18,7 @@
             <template v-if="cartStore.cardsCountArr.length">
                 <CartCard
                     v-for="card in cartStore.cardsCountArr" :key="card.id"
-                    :image="card.image" :title="card.title" :price="card.price" :id="card.id" :count="card.count" :total="card.total"
+                    :image="card.image" :title="card.title" :price="card.price" :id="card.id" :count="card.count!" :total="card.total!"
                 />
             </template>
             <template v-else>
@@ -29,9 +29,10 @@
             <h3 class="cart__right-title">Cart Totals</h3>
             <p class="cart__right-text">Coupon Apply</p>
             <form class="cart__right-form" action="">
-                <input v-model="cartStore.discount" class="cart__right-form-input" type="number" min="0" placeholder="Enter coupon code here...">
-                <button @click.prevent="" class="cart__right-form-button">Apply</button>
+                <input v-model="cartStore.discount" :disabled="cartStore.disabled" class="cart__right-form-input" type="number" min="0" placeholder="Enter coupon code here...">
+                <button @click.prevent="cartStore.apply()" class="cart__right-form-button">Apply</button>
             </form>
+            <p class="cart__right-applyText" :style="{display: cartStore.display, color: cartStore.color}">{{ cartStore.applyText }}</p>
             <div class="cart__right-price">
                 <div class="cart__right-price-subtotal">
                     <p class="cart__right-text">Subtotal</p>
@@ -72,7 +73,6 @@
 
             &-title{
                 border-bottom: 1px solid #46A35850;
-                // display: flex;
                 display: grid;
                 grid-template-columns: minmax(100px, 300px) minmax(70px, 160px) minmax(100px, 150px) 80px;
                 padding-bottom: 0.6875rem;
@@ -82,6 +82,10 @@
                     font-weight: 700;
                     font-size: 1rem;
                     line-height: 100%;
+
+                    @media (max-width: 540px) {
+                        display: none;
+                    }
                 }
             }
         }
@@ -147,6 +151,11 @@
                     font-weight: 700;
                     cursor: pointer;
                 }
+            }
+
+            &-applyText{
+                position: relative;
+                top: -1.875rem;
             }
 
             &-price{

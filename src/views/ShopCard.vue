@@ -1,6 +1,6 @@
 <script setup lang="ts">
     import { useRoute } from 'vue-router';
-    import { ref, onMounted } from 'vue';
+    import { ref, onMounted, computed, watch } from 'vue';
     import { useFavouriteStore } from '../stores/useFavouriteStore';
     import { useCartStore } from '../stores/useCartStore';
     import { CardType } from '../types';
@@ -17,16 +17,12 @@
     let card:CardType[];
     const cardData = ref<CardType>();
 
-    
-    async function plants() {
-        const response = await fetch('../../Plants.json');
-        const data = await response.json();
-        card = data.filter((card:CardType) => card.id == +id);
-        cardData.value = card[0];
-    }
+    card = cartStore.cards.filter((card:CardType) => card.id == +id);
+    cardData.value = card[0];
     
     onMounted(() => {
-        plants();
+        if (cartStore.cards.length) return;
+        cartStore.getCards();
     });
 
     function decrement(){
@@ -34,17 +30,18 @@
             count.value--;
             cartStore.changeCount(+id, count.value);
         }else{
-            return;
+            return count.value = 1;
         }
     }
 
     function increment(){
+        if(count.value <= 0) return count.value = 1;
         count.value++;
         cartStore.changeCount(+id, count.value);
     }
 
     function favourite(){
-        favouriteStore.addToFavourite(+id);
+        favouriteStore.addToFavourite(+id, cardData.value!.image, cardData.value!.title, cardData.value!.price);
     }
 
     function toCart(){
@@ -64,6 +61,11 @@
         const valueCard = cartStore.cardsCountArr.find((value) => value.id == id);
         return valueCard?.count;
     }
+
+    watch(count, (newCount) => {
+        if(count.value <= 0) return;
+        cartStore.changeCount(+id, newCount);
+    })
 </script>
 
 <template>
@@ -81,14 +83,23 @@
             </div>
             <div class="shopCard__specification-cart">
                 <div class="shopCard__specification-cart-count" :style="{display: `${display()}`}">
-                    <button class="shopCard__specification-cart-count-button btn padding" @click="decrement()">-</button>
-                    <p class="shopCard__specification-cart-count-text">{{ cardCount(+id) }}</p>
+                    <button class="shopCard__specification-cart-count-button btn" @click="decrement()">&minus;</button>
+                    <input class="shopCard__specification-cart-count-text" type="number" v-model="count" min="1">
                     <button class="shopCard__specification-cart-count-button btn" @click="increment()">+</button>
                 </div>
                 <div class="shopCard__specification-cart-buttons">
                     <button class="shopCard__specification-cart-buttons-button btn">buy now</button>
                     <button @click="toCart" :class="{'cart': cartStore.isCardInCart(+id)}" class="shopCard__specification-cart-buttons-button btn">{{cartStore.isCardInCart(+id) ? "remove" : "add to cart"}}</button>
-                    <button @click="favourite" :class="{'favourite': favouriteStore.isFavouriteCard(+id)}" class="shopCard__specification-cart-buttons-button btn">favourites</button>
+                    <button @click="favourite" class="shopCard__specification-cart-buttons-button btn btn--favourite">
+                        <svg width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path :class="{'favourite': favouriteStore.isFavouriteCard(+id)}" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5
+                                    2 5.42 4.42 3 7.5 3c1.74 0 3.41 0.81 4.5 2.09
+                                    C13.09 3.81 14.76 3 16.5 3
+                                    19.58 3 22 5.42 22 8.5
+                                    c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
+                                    fill="none" stroke="#000" stroke-width="1.5"/>
+                        </svg>
+                    </button>
                 </div>
             </div>
             <div class="shopCard__specification-tags">
@@ -189,6 +200,28 @@
                         max-width: 2.25rem;
                         width: 100%;
                     }
+
+                    &-text{
+                        width: 30px;
+                        border: none;
+                        border-bottom: 1px solid #000;
+                        text-align: center;
+                        font-size: 0.90rem;
+                        -moz-appearance: textfield;
+
+                        &::-webkit-inner-spin-button, ::-webkit-outer-spin-button{
+                            -webkit-appearance: none;
+                            margin: 0;
+                        }
+
+                        &::-ms-clear{
+                            display: none;
+                        }
+
+                        &:focus{
+                            outline: none;
+                        }
+                    }
                 }
 
                 &-buttons{
@@ -224,15 +257,19 @@
         }
     }
 
+    .btn--favourite{
+        max-width: 2.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
     .favourite{
-        color: #f00;
+        fill: #f00;
+        stroke: #f00;
     }
 
     .cart{
         color: #f00;
-    }
-
-    .padding{
-        padding: 7px 10px 13px;
     }
 </style>

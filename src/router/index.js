@@ -32,6 +32,11 @@ const router = createRouter({
       name: 'cart',
       component: () => import('../views/ShopingCart.vue'),
     },
+    {
+      path: '/favourite',
+      name: 'favourite',
+      component: () => import('../views/FavouriteCards.vue'),
+    },
   ],
 
   scrollBehavior(to, from, savedPosition) {

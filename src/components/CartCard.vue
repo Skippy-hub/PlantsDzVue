@@ -1,6 +1,6 @@
 <script setup lang="ts">
     import { useCartStore } from '../stores/useCartStore';
-    import { ref } from 'vue';
+    import { ref, watch } from 'vue';
 
     const cartStore = useCartStore();
 
@@ -22,14 +22,20 @@
             count.value--;
             cartStore.changeCount(props.id!, count.value);
         }else{
-            return;
+            return count.value = 1;
         }
     }
 
     function increment(){
+        if(count.value <= 0) return count.value = 1;
         count.value++;
         cartStore.changeCount(props.id!, count.value);
     }
+
+    watch(count, (newCount) => {
+        if(count.value <= 0) return;
+        cartStore.changeCount(props.id, newCount);
+    })
 </script>
 
 <template>
@@ -40,8 +46,8 @@
         </div>
         <p class="card__price">${{ props.price }}</p>
         <div class="card__count">
-            <button @click="decrement()" class="card__count-button btn padding">-</button>
-            <p class="card__count-text">{{ props.count }}</p>
+            <button @click="decrement()" class="card__count-button btn">&minus;</button>
+            <input class="card__count-text" type="number" v-model="count" min="1">
             <button @click="increment()" class="card__count-button btn">+</button>
         </div>
         <p class="card__fullPrice">${{ (props.total!).toFixed(2) }}</p>
@@ -68,7 +74,6 @@
     }
 
     .card{
-        // display: flex;
         display: grid;
         grid-template-columns: minmax(80px, 270px) minmax(50px, 140px) minmax(70px, 130px) auto auto;
         gap: 1rem;
@@ -81,15 +86,21 @@
             align-items: center;
             max-width: 15rem;
             width: 100%;
-            // margin-right: 3.5rem;
+
+            @media (max-width: 540px) {
+                display: grid;
+                grid-template-rows: auto auto;
+                gap: 0.5rem;
+                justify-items: center;
+            }
 
             &-img{
                 width: 4.375rem;
                 height: 4.375rem;
 
-                @media (max-width: 480px) {
-                    display: none;
-                }
+                // @media (max-width: 480px) {
+                //     display: none;
+                // }
             }
 
             &-title{
@@ -97,6 +108,7 @@
                 font-size: 1rem;
                 line-height: 100%;
                 color: #3d3d3d;
+
 
                 @media (max-width: 480px) {
                     text-align-last: left;
@@ -109,7 +121,6 @@
             color: #727272;
             font-size: 1rem;
             line-height: 100%;
-            // margin-right: 5rem;
             max-width: 3.75rem;
             width: 100%;
 
@@ -122,17 +133,28 @@
             display: flex;
             align-items: center;
             gap: 1rem;
-            // margin-right: 2.5rem;
             max-width: 7.125rem;
             width: 100%;
             
             &-text{
-                color: #3d3d3d;
-                font-size: 1rem;
-                line-height: 100%;
-                
-                @media (max-width: 480px) {
-                    font-size: 0.75rem;
+                width: 30px;
+                border: none;
+                border-bottom: 1px solid #000;
+                text-align: center;
+                font-size: 0.90rem;
+                -moz-appearance: textfield;
+
+                &::-webkit-inner-spin-button, ::-webkit-outer-spin-button{
+                    -webkit-appearance: none;
+                    margin: 0;
+                }
+
+                &::-ms-clear{
+                    display: none;
+                }
+
+                &:focus{
+                    outline: none;
                 }
             }
 
@@ -141,11 +163,11 @@
                 line-height: 57%;
                 padding: 0.625rem;
                 border-radius: 2rem;
-                width: 2.25rem;
+                min-width: 2.25rem;
                 height: 2.25rem;
 
                 @media (max-width: 480px) {
-                    width: 1.25rem;
+                    min-width: 1.25rem;
                     height: 1.25rem;
                     font-size: 1.25rem;
                     padding: 0;
@@ -160,7 +182,6 @@
             font-size: 1rem;
             line-height: 100%;
             font-weight: 700;
-            // margin-right: 3rem;
 
             @media (max-width: 480px) {
                 font-size: 0.75rem;
@@ -175,14 +196,6 @@
             @media (max-width: 480px) {
                 width: 1.5rem;
             }
-        }
-    }
-    
-    .padding{
-        padding: 7px 10px 13px;
-
-        @media (max-width:480px) {
-            padding: 0;
         }
     }
 </style>

@@ -1,30 +1,21 @@
 <script setup lang="ts">
     import { ref, onMounted, computed } from 'vue';
     import CardPlant from '../components/CardPlant.vue';
-    import { CardType } from '../types';
+    import { useCartStore } from '../stores/useCartStore';
 
 
-    const cards = ref<CardType[]>();
-    const size = ref<string>('all');
-
-    const minPrice = ref<string>();
-    const maxPrice = ref<string>();
-
-    async function plants() {
-        const response = await fetch('../../Plants.json');
-        const data:CardType[] = await response.json();
-        cards.value = data;
-    }
+    const cartStore = useCartStore();
 
     onMounted(() => {
-        plants();
+        if (cartStore.cards.length) return;
+        cartStore.getCards();
     });
 
     const filterSize = computed(() => {
-        if(size.value == 'all'){
-            return cards.value;
+        if(cartStore.size == 'all'){
+            return cartStore.cards;
         }else{
-            return cards.value!.filter((card) => card.size == size.value);
+            return cartStore.cards.filter((card) => card.size == cartStore.size);
         }
     });
 </script>
@@ -34,7 +25,7 @@
         <div class="shop__filters">
             <div class="shop__filters-size">
                 <label class="shop__filters-size-text" for="size">Size: </label>
-                <select class="shop__filters-size-select" v-model="size" name="size" id="size">
+                <select class="shop__filters-size-select" v-model="cartStore.size" name="size" id="size">
                     <option class="shop__filters-size-select-value" value="all">All</option>
                     <option class="shop__filters-size-select-value" value="small">Small</option>
                     <option class="shop__filters-size-select-value" value="medium">Medium</option>
@@ -44,17 +35,17 @@
             <div class="shop__filters-price">
                 <div class="shop__filters-price-block">
                     <label class="shop__filters-price-block-text" for="min">Price from: </label>
-                    <input class="shop__filters-price-block-input" id="min" v-model="minPrice" type="number">
+                    <input class="shop__filters-price-block-input" id="min" v-model="cartStore.minPrice" type="number">
                 </div>
                 <div class="shop__filters-price-block">
                     <label class="shop__filters-price-block-text" for="max">Price to: </label>
-                    <input class="shop__filters-price-block-input" id="max" v-model="maxPrice" type="number">
+                    <input class="shop__filters-price-block-input" id="max" v-model="cartStore.maxPrice" type="number">
                 </div>
             </div>
         </div>
         <div class="shop__cards">
             <template v-for="card in filterSize" :key="card.id">
-                <template v-if="(!minPrice || card.price >= minPrice) && (!maxPrice || card.price <= maxPrice)">
+                <template v-if="(!cartStore.minPrice || card.price >= cartStore.minPrice) && (!cartStore.maxPrice || card.price <= cartStore.maxPrice)">
                     <CardPlant
                     :key = "card.id"
                     :image="card.image" :title="card.title" :price="card.price" :id="card.id"
