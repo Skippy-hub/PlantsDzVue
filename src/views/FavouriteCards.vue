@@ -1,19 +1,29 @@
 <script setup lang="ts">
     import { useFavouriteStore } from '../stores/useFavouriteStore';
     import CardPlant from '../components/CardPlant.vue';
+    import { computed, ref } from 'vue';
 
     const favouriteStore = useFavouriteStore();
+
+    const isEmpty = computed(() => {
+        if(favouriteStore.favourites.length == 0){
+           return true; 
+        } else{
+            return false;
+        }
+    })
+    
 </script>
 
 <template>
-    <section class="cards">
+    <section class="cards" :class="{'empty': isEmpty}">
         <template v-if="favouriteStore.favourites.length">
             <CardPlant class="cards__card" v-for="card in favouriteStore.favourites" :key = "card.id"
             :image="card.image" :title="card.title" :price="card.price" :id="card.id"
             />
         </template>
         <template v-else>
-            <p class="cards__text">Fovourites are missing</p>
+            <p class="cards__text">Favourites are missing</p>
         </template>
     </section>
 </template>
@@ -40,7 +50,10 @@
             text-align: center;
             font-size: 3rem;
             font-weight: 700;
-            white-space: nowrap;
         }
+    }
+
+    .empty{
+        display: block;
     }
 </style>

@@ -29,7 +29,7 @@
             <h3 class="cart__right-title">Cart Totals</h3>
             <p class="cart__right-text">Coupon Apply</p>
             <form class="cart__right-form" action="">
-                <input v-model="cartStore.discount" :disabled="cartStore.disabled" class="cart__right-form-input" type="number" min="0" placeholder="Enter coupon code here...">
+                <input v-model="cartStore.discountInput" :disabled="cartStore.disabled" class="cart__right-form-input" type="number" min="0" placeholder="Enter coupon code here...">
                 <button @click.prevent="cartStore.apply()" class="cart__right-form-button">Apply</button>
             </form>
             <p class="cart__right-applyText" :style="{display: cartStore.display, color: cartStore.color}">{{ cartStore.applyText }}</p>

@@ -16,8 +16,6 @@
             <ul class="burger-menu__nav-items">
                 <li class="burger-menu__nav-items-item"><RouterLink to="/" class="burger-menu__nav-items-item-text">Home</RouterLink></li>
                 <li class="burger-menu__nav-items-item"><RouterLink to="/shop" class="burger-menu__nav-items-item-text">Shop</RouterLink></li>
-                <li class="burger-menu__nav-items-item"><RouterLink to="/" class="burger-menu__nav-items-item-text">Plant care</RouterLink></li>
-                <li class="burger-menu__nav-items-mail"><RouterLink to="/" class="burger-menu__nav-items-item-text">Blogs</RouterLink></li>
                 <li>
                     <RouterLink to="/favourite">
                     <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -54,8 +52,6 @@
             <ul class="header__nav-list">
                 <li class="header__nav-list-item"><RouterLink to="/" class="header__nav-list-item-link">Home</RouterLink></li>
                 <li class="header__nav-list-item"><RouterLink to="/shop" class="header__nav-list-item-link">Shop</RouterLink></li>
-                <li class="header__nav-list-item"><RouterLink to="/" class="header__nav-list-item-link">Plant care</RouterLink></li>
-                <li class="header__nav-list-item"><RouterLink to="/" class="header__nav-list-item-link">Blogs</RouterLink></li>
             </ul>
         </nav>
         <div class="header__options">

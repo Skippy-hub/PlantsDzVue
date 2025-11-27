@@ -63,9 +63,15 @@
     }
 
     watch(count, (newCount) => {
-        if(count.value <= 0) return;
+        if(count.value < 0) {
+            return count.value = 1;
+        }
         cartStore.changeCount(+id, newCount);
-    })
+    });
+
+    function Focus(){
+        if(!count.value) return count.value = 1;
+    }
 </script>
 
 <template>
@@ -84,7 +90,7 @@
             <div class="shopCard__specification-cart">
                 <div class="shopCard__specification-cart-count" :style="{display: `${display()}`}">
                     <button class="shopCard__specification-cart-count-button btn" @click="decrement()">&minus;</button>
-                    <input class="shopCard__specification-cart-count-text" type="number" v-model="count" min="1">
+                    <input class="shopCard__specification-cart-count-text" type="number" v-model="count" min="1" @blur="Focus()">
                     <button class="shopCard__specification-cart-count-button btn" @click="increment()">+</button>
                 </div>
                 <div class="shopCard__specification-cart-buttons">

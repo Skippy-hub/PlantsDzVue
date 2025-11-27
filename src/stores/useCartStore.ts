@@ -73,6 +73,7 @@ export const useCartStore = defineStore('cart', () => {
     }
 
     const discount = ref<number>(0);
+    const discountInput = ref<number>(0);
 
     const discountFixed = computed(() => {
         if(discount.value || discount.value === 0){
@@ -88,7 +89,7 @@ export const useCartStore = defineStore('cart', () => {
     const color = ref<string>('');
 
     function apply(){   //фнукция блока
-        if (discount.value <= 0){
+        if (discountInput.value <= 0){
             color.value = '#f00';
             display.value = 'block';
             return;
@@ -97,6 +98,7 @@ export const useCartStore = defineStore('cart', () => {
         applyText.value = "Coupon is accepted";
         color.value = '#46A358';
         display.value = 'block';
+        discount.value = discountInput.value;
     }
 
     const totalPrice = ref(0);
@@ -137,6 +139,7 @@ export const useCartStore = defineStore('cart', () => {
         cartCount,
         cardsCountArr,
         discount,
+        discountInput,
         discountFixed,
         finalPrice,
         cards,

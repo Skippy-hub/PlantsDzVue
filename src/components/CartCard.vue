@@ -33,9 +33,15 @@
     }
 
     watch(count, (newCount) => {
-        if(count.value <= 0) return;
+        if(count.value < 0) {
+            return count.value = 1;
+        }
         cartStore.changeCount(props.id, newCount);
-    })
+    });
+
+    function Focus(){
+        if(!count.value) return count.value = 1;
+    }
 </script>
 
 <template>
@@ -47,7 +53,7 @@
         <p class="card__price">${{ props.price }}</p>
         <div class="card__count">
             <button @click="decrement()" class="card__count-button btn">&minus;</button>
-            <input class="card__count-text" type="number" v-model="count" min="1">
+            <input class="card__count-text" type="number" v-model="count" min="1" @blur="Focus()">
             <button @click="increment()" class="card__count-button btn">+</button>
         </div>
         <p class="card__fullPrice">${{ (props.total!).toFixed(2) }}</p>
