@@ -33,6 +33,7 @@
         display: grid;
         grid-template-columns: repeat(4, 1fr);
         gap: 1.5rem;
+        padding-top: 5.375rem;
 
         @media (max-width: 767px) {
             grid-template-columns: repeat(3, 1fr);

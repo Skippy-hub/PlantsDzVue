@@ -17,7 +17,7 @@
 <style lang="scss" scoped>
     .hero{
         background: #F5F5F5;
-        padding: 1.5rem 2.5rem;
+        padding: 5.375rem 2.5rem 1.5rem;
         display: flex;
         justify-content: space-between;
         gap: 1rem;

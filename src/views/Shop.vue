@@ -58,6 +58,7 @@
 
 <style lang="scss" scoped>
     .shop{
+        padding-top: 6rem;
 
         &__filters{
             display: flex;

@@ -132,6 +132,7 @@
         gap: 1rem;
         flex-wrap: wrap;
         align-items: center;
+        padding-top: 5.375rem;
 
         &__img{
             max-width: 30rem;

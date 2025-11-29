@@ -59,7 +59,7 @@
         justify-content: space-between;
         gap: 1rem;
         color: #3d3d3d;
-        padding-top: 2.25rem;
+        padding-top: 7rem;
         padding-bottom: 5.4375rem;
 
         @media (max-width: 979px) {

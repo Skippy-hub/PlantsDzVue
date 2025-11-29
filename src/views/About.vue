@@ -12,6 +12,7 @@
 <style lang="scss" scoped>
     .about{
         margin-bottom: 2rem;
+        padding-top: 5.375rem;
 
         &__title{
             text-align: center;
