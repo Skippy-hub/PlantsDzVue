@@ -86,6 +86,13 @@
         align-items: center;
         text-align: center;
         margin-bottom: 0.5rem;
+        place-items: center;
+
+        @media (max-width: 540px) {
+            grid-template-columns: 1fr 1fr;
+            border-bottom: 1px solid #000;
+            padding-bottom: 0.5rem;
+        }
 
         &__left{
             display: flex;
@@ -98,15 +105,12 @@
                 grid-template-rows: auto auto;
                 gap: 0.5rem;
                 justify-items: center;
+                grid-column: 1/-1;
             }
 
             &-img{
                 width: 4.375rem;
                 height: 4.375rem;
-
-                // @media (max-width: 480px) {
-                //     display: none;
-                // }
             }
 
             &-title{
@@ -141,6 +145,14 @@
             gap: 1rem;
             max-width: 7.125rem;
             width: 100%;
+
+            @media (max-width: 540px) {
+                max-width: 8.5rem;
+            }
+
+            @media (max-width: 480px) {
+                max-width: 6.5rem;
+            }
             
             &-text{
                 width: 30px;

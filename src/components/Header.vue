@@ -218,7 +218,6 @@
                         cursor: pointer;
                         width: 100px;
                         text-align: center;
-                        border: 1px solid #000;
                         padding: 0.25rem 0;
                         display: flex;
                         align-items: center;
