@@ -1,10 +1,13 @@
 <script setup lang="ts">
-    import { RouterLink } from 'vue-router';
+    import { RouterLink, useRouter } from 'vue-router';
     import { useCartStore } from '../stores/useCartStore';
     import { useFavouriteStore } from '../stores/useFavouriteStore';
+    import { useAutorisation } from '../stores/useAutorisation';
     
     const cartStore = useCartStore();
     const favouriteStore = useFavouriteStore();
+    const Autoris = useAutorisation();
+    const router = useRouter();
 
     interface Props {
         id: number;
@@ -14,6 +17,11 @@
     }
 
     const props = defineProps<Props>();
+
+    function toFavourites(){
+        if(!Autoris.isAuthenticated) return router.push('/autorisation/sign-in');
+        favouriteStore.addToFavourite(props.id, props.image, props.title, props.price);
+    }
 </script>
 
 <template>
@@ -21,7 +29,7 @@
         <img class="card__img" :src="props.image" alt="">
         <h5 class="card__title" :class="{'cart': cartStore.isCardInCart(props.id!)}">{{ props.title }}</h5>
         <p class="card__price" :class="{'cart': cartStore.isCardInCart(props.id!)}">${{ props.price }}</p>
-        <button class="card__button" :class="{'visibility': favouriteStore.isFavouriteCard(props.id)}" @click.prevent="favouriteStore.addToFavourite(props.id, props.image, props.title, props.price)">
+        <button class="card__button" :class="{'visibility': favouriteStore.isFavouriteCard(props.id)}" @click.prevent="toFavourites">
             <svg width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                 <path :class="{'active': favouriteStore.isFavouriteCard(props.id!)}" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5
                         2 5.42 4.42 3 7.5 3c1.74 0 3.41 0.81 4.5 2.09

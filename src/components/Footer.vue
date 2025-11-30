@@ -22,6 +22,8 @@
             description: 'We are an online plant shop offering a wide range of cheap and trendy plants.',
         },
     ];
+
+    const date = new Date();
 </script>
 
 <template>
@@ -51,7 +53,7 @@
             <a class="footer__middle-text" href="tel:+7777777">+88 01911 717 490</a>
             <RouterLink to="/About" class="footer__middle-text">About us</RouterLink>
         </div>
-        <p class="footer__copyleft">&#127279; 2021 GreenShop. All Rights Reserved.</p>
+        <p class="footer__copyleft">&#127279; {{ date.getFullYear() }} GreenShop. All Rights Reserved.</p>
     </footer>
 </template>
 
