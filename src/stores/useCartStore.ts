@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import { computed, ref } from 'vue';
+import { computed, ref, onMounted } from 'vue';
 import { CardType } from '../types';
 
 export const useCartStore = defineStore('cart', () => {
@@ -125,6 +125,14 @@ export const useCartStore = defineStore('cart', () => {
         cards.value = data;
     }
 
+    onMounted(() => {
+        getCards();
+    });
+
+    function getCard(id:number){
+        return cards.value.find((card) => card.id === id);
+    }
+
     return {
         addToCart,
         isCardInCart,
@@ -133,6 +141,7 @@ export const useCartStore = defineStore('cart', () => {
         removeToCart,
         getCards,
         apply,
+        getCard,
         cartCount,
         cardsCountArr,
         discount,

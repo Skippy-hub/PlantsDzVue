@@ -22,7 +22,7 @@
     
     onMounted(() => {
         if (cartStore.cards.length) return;
-        cartStore.getCards();
+        cartStore.getCard(+id);
     });
 
     function decrement(){
