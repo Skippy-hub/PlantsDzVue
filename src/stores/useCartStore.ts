@@ -3,9 +3,6 @@ import { computed, ref } from 'vue';
 import { CardType } from '../types';
 
 export const useCartStore = defineStore('cart', () => {
-    const minPrice = ref<string>();
-    const maxPrice = ref<string>();
-    const size = ref<string>('all');
 
     const cardsCountArr = ref<CardType[]>(getCartImmediately());
     
@@ -147,8 +144,5 @@ export const useCartStore = defineStore('cart', () => {
         applyText,
         display,
         color,
-        minPrice,
-        maxPrice,
-        size,
     }
 });

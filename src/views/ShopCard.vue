@@ -94,7 +94,6 @@
                     <button class="shopCard__specification-cart-count-button btn" @click="increment()">+</button>
                 </div>
                 <div class="shopCard__specification-cart-buttons">
-                    <button class="shopCard__specification-cart-buttons-button btn">buy now</button>
                     <button @click="toCart" :class="{'cart': cartStore.isCardInCart(+id)}" class="shopCard__specification-cart-buttons-button btn">{{cartStore.isCardInCart(+id) ? "remove" : "add to cart"}}</button>
                     <button @click="favourite" class="shopCard__specification-cart-buttons-button btn btn--favourite">
                         <svg width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -110,7 +109,6 @@
             </div>
             <div class="shopCard__specification-tags">
                 <p class="shopCard__specification-tags-text"><span class="shopCard__specification-tags-text-bold">Category:</span> {{ cardData?.category }}</p>
-                <p class="shopCard__specification-tags-text"><span class="shopCard__specification-tags-text-bold">Tags:</span> Home, Garden, Plants</p>
             </div>
         </div>
     </section>

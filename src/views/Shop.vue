@@ -1,10 +1,12 @@
 <script setup lang="ts">
-    import { ref, onMounted, computed } from 'vue';
+    import { onMounted, computed } from 'vue';
     import CardPlant from '../components/CardPlant.vue';
     import { useCartStore } from '../stores/useCartStore';
+    import { useFilterStore } from '../stores/useFilterStore';
 
 
     const cartStore = useCartStore();
+    const filterStore = useFilterStore();
 
     onMounted(() => {
         if (cartStore.cards.length) return;
@@ -12,10 +14,14 @@
     });
 
     const filterSize = computed(() => {
-        if(cartStore.size == 'all'){
+        if(filterStore.size == 'all' && filterStore.category == 'all'){
             return cartStore.cards;
-        }else{
-            return cartStore.cards.filter((card) => card.size == cartStore.size);
+        } else if(filterStore.size == 'all' && filterStore.category != 'all'){
+            return cartStore.cards.filter((card) => card.category == filterStore.category);
+        } else if(filterStore.size != 'all' && filterStore.category == 'all'){
+            return cartStore.cards.filter((card) => card.size == filterStore.size);
+        } else{
+            return cartStore.cards.filter((card) => card.category == filterStore.category && card.size == filterStore.size);
         }
     });
 </script>
@@ -25,27 +31,37 @@
         <div class="shop__filters">
             <div class="shop__filters-size">
                 <label class="shop__filters-size-text" for="size">Size: </label>
-                <select class="shop__filters-size-select" v-model="cartStore.size" name="size" id="size">
+                <select class="shop__filters-size-select" v-model="filterStore.size" name="size" id="size">
                     <option class="shop__filters-size-select-value" value="all">All</option>
                     <option class="shop__filters-size-select-value" value="small">Small</option>
                     <option class="shop__filters-size-select-value" value="medium">Medium</option>
                     <option class="shop__filters-size-select-value" value="large">Large</option>
                 </select>
             </div>
+            <div class="shop__filters-category">
+                <label class="shop__filters-category-text" for="category">Category: </label>
+                <select class="shop__filters-category-select" v-model="filterStore.category" name="category" id="category">
+                    <option class="shop__filters-category-select-value" value="all">All</option>
+                    <option class="shop__filters-category-select-value" value="Outdoor Plants">Outdoor Plants</option>
+                    <option class="shop__filters-category-select-value" value="Flowerpot on a stand">Flowerpot on a stand</option>
+                    <option class="shop__filters-category-select-value" value="Potter Plants">Potter Plants</option>
+                    <option class="shop__filters-category-select-value" value="Hanging Plants">Hanging Plants</option>
+                </select>
+            </div>
             <div class="shop__filters-price">
                 <div class="shop__filters-price-block">
                     <label class="shop__filters-price-block-text" for="min">Price from: </label>
-                    <input class="shop__filters-price-block-input" id="min" v-model="cartStore.minPrice" type="number">
+                    <input class="shop__filters-price-block-input" id="min" v-model="filterStore.minPrice" type="number">
                 </div>
                 <div class="shop__filters-price-block">
                     <label class="shop__filters-price-block-text" for="max">Price to: </label>
-                    <input class="shop__filters-price-block-input" id="max" v-model="cartStore.maxPrice" type="number">
+                    <input class="shop__filters-price-block-input" id="max" v-model="filterStore.maxPrice" type="number">
                 </div>
             </div>
         </div>
         <div class="shop__cards">
             <template v-for="card in filterSize" :key="card.id">
-                <template v-if="(!cartStore.minPrice || card.price >= cartStore.minPrice) && (!cartStore.maxPrice || card.price <= cartStore.maxPrice)">
+                <template v-if="(!filterStore.minPrice || card.price >= filterStore.minPrice) && (!filterStore.maxPrice || card.price <= filterStore.maxPrice)">
                     <CardPlant
                     :key = "card.id"
                     :image="card.image" :title="card.title" :price="card.price" :id="card.id"

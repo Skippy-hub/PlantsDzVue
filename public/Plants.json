@@ -5,7 +5,7 @@
         "title": "Barberton Daisy",
         "price": "119.00",
         "size": "large",
-        "category": "Potter Plants"
+        "category": "Outdoor Plants"
     },
     {
         "id": 2,
@@ -13,7 +13,7 @@
         "title": "Angel Wing Begonia",
         "price": "169.00",
         "size": "medium",
-        "category": "Potter Plants"
+        "category": "Flowerpot on a stand"
     },
     {
         "id": 3,
@@ -53,7 +53,7 @@
         "title": "Bird's Nest Fern",
         "price": "99.00",
         "size": "small",
-        "category": "Potter Plants"
+        "category": "Flowerpot on a stand"
     },
     {
         "id": 8,
@@ -61,7 +61,7 @@
         "title": "Broadleaf Lady Palm",
         "price": "59.00",
         "size": "medium",
-        "category": "Potter Plants"
+        "category": "Outdoor Plants"
     },
     {
         "id": 9,
@@ -69,6 +69,6 @@
         "title": "Chinese Evergreen",
         "price": "39.00",
         "size": "small",
-        "category": "Potter Plants"
+        "category": "Hanging Plants"
     }
 ]
