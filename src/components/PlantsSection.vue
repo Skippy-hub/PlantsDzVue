@@ -8,18 +8,18 @@
     const cartStore = useCartStore();
     const filterStore = useFilterStore();
     
-    const result = ref<CardType[]>([]);
-    
     const sortArr = computed(() => {
-        result.value = cartStore.cards;
         if(filterStore.size == "all" && filterStore.category == 'all'){
-            return result.value;
+            return cartStore.cards;
+
         } else if(filterStore.size == 'all' && filterStore.category != 'all'){
-            return result.value.filter((card) => card.category == filterStore.category);
+            return cartStore.cards.filter((card) => card.category == filterStore.category);
+
         } else if(filterStore.size != 'all' && filterStore.category == 'all'){
-            return result.value.filter((card) => card.size == filterStore.size);
+            return cartStore.cards.filter((card) => card.size == filterStore.size);
+
         } else{
-            return result.value.filter((card) => card.category == filterStore.category && card.size == filterStore.size);
+            return cartStore.cards.filter((card) => card.category == filterStore.category && card.size == filterStore.size);
         }
     });
     

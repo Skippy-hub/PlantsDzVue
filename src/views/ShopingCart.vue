@@ -2,8 +2,15 @@
     import { RouterLink } from 'vue-router';
     import CartCard from '../components/CartCard.vue';
     import { useCartStore } from '../stores/useCartStore';
+    import { ref } from 'vue';
 
     const cartStore = useCartStore();
+
+    const isVisible = ref<string>('none');
+
+    function reset(){
+
+    }
 </script>
 
 <template>
@@ -47,13 +54,179 @@
                 <p class="cart__right-total-title">Total</p>
                 <p class="cart__right-total-number">${{ cartStore.finalPrice.toFixed(2) }}</p>
             </div>
-            <button class="cart__right-checkout">Proceed To Checkout</button>
+            <button @click="isVisible = 'flex'" class="cart__right-checkout">Proceed To Checkout</button>
             <RouterLink to="/shop" class="cart__right-back">Continue Shopping</RouterLink>
         </div>
     </section>
+
+    <div class="modal" :style="{display: isVisible}" @click="isVisible = 'none'">
+        <div class="modal__content" @click.stop="">
+            <h2 class="modal__content-title">Order</h2>
+            <div class="modal__content-details">
+                <h3 class="modal__content-details-name">Order Details</h3>
+                <div class="modal__content-details-cards">
+                    <div class="modal__content-details-cards-card" v-for="card in cartStore.cardsCountArr">
+                        <div class="modal__content-details-cards-card-left">
+                            <img class="modal__content-details-cards-card-left-img" :src="card.image" alt="">
+                            <h4 class="modal__content-details-cards-card-left-title">{{ card.title }}</h4>
+                        </div>
+                        <p class="modal__content-details-cards-card-count">(x {{ card.count }})</p>
+                        <p class="modal__content-details-cards-card-total">${{ card.total?.toFixed(2) }}</p>
+                    </div>
+                </div>
+                <div class="modal__content-details-price">
+                    <div class="modal__content-details-price-block">
+                        <p class="modal__content-details-price-block-text">Shiping</p>
+                        <p class="modal__content-details-price-block-text modal__content-details-price-block-text--bold">${{ cartStore.discount.toFixed(2) }}</p>
+                    </div>
+                    <div class="modal__content-details-price-block">
+                        <p class="modal__content-details-price-block-text modal__content-details-price-block-text--bold">Total</p>
+                        <p class="modal__content-details-price-block-text modal__content-details-price-block-text--green modal__content-details-price-block-text--bold">${{ cartStore.finalPrice.toFixed(2) }}</p>
+                    </div>
+                </div>
+            </div>
+            <button @click="reset" class="modal__content-button">Pay order</button>
+        </div>
+    </div>
 </template>
 
 <style scoped lang="scss">
+    .modal{
+        position: absolute;
+        background: #00000050;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: 1000;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        &__content{
+            max-width: 35rem;
+            width: 100%;
+            background: #fff;
+            border-radius: 0.375rem;
+            text-align: center;
+            padding: 0.75rem 1.5rem;
+
+            &-title{
+                font-weight: 700;
+                font-size: 2rem;
+                left: 100%;
+                color: #3d3d3d;
+            }
+            
+            &-details{
+                margin-bottom: 1.5rem;
+                border-bottom: 1px solid #00000050;
+                padding-bottom: 0.5rem;
+                
+                &-name{
+                    color: #3d3d3d;
+                    font-size: 1rem;
+                    font-weight: 700;
+                    line-height: 100%;
+                    text-align: left;
+                    padding-bottom: 0.5rem;
+                    border-bottom: 1px solid #00000050;
+                    margin-bottom: 1rem;
+                }
+
+                &-cards{
+                    display: flex;
+                    flex-direction: column;
+                    gap: 1rem;
+                    border-bottom: 1px solid #00000050;
+                    padding-bottom: 0.5rem;
+                    margin-bottom: 1rem;
+
+                    &-card{
+                        display: flex;
+                        align-items: center;
+                        justify-content: space-between;
+                        gap: 1rem;
+    
+                        &-left{
+                            display: flex;
+                            align-items: center;
+                            gap: 0.5rem;
+                            width: 100%;
+    
+                            &-img{
+                                max-width: 4.375rem;
+                                width: 100%;
+                            }
+    
+                            &-title{
+                                color: #3d3d3d;
+                                font-size: 1.125rem;
+                                font-weight: 700;
+                                line-height: 100%;
+                            }
+                        }
+    
+                        &-count{
+                            color: #727272;
+                            font-size: 1rem;
+                            line-height: 100%;
+                            width: 10rem;
+                        }
+    
+                        &-total{
+                            color: #46A358;
+                            font-size: 1.25rem;
+                            line-height: 100%;
+                            font-weight: 700;
+                            width: 15rem;
+                        }
+                    }
+                }
+
+                &-price{
+                    display: flex;
+                    flex-direction: column;
+                    gap: 1.5rem;
+
+                    &-block{
+                        display: flex;
+                        justify-content: space-between;
+                        margin: 0 auto;
+                        max-width: 20rem;
+                        width: 100%;
+
+                        &-text{
+                            font-size: 1rem;
+                            color: #3d3d3d;
+                            line-height: 100%;
+
+                            &--bold{
+                                font-weight: 700;
+                            }
+    
+                            &--green{
+                                color: #46A358;
+                            }
+                        }
+
+                    }
+                }
+            }
+
+            &-button{
+                color: #fff;
+                font-size: 1rem;
+                line-height: 100%;
+                font-weight: 700;
+                background: #46A358;
+                border-radius: 0.375rem;
+                border: transparent;
+                padding: 0.75rem 1.125rem;
+            }
+        }
+    }
+
     .cart{
         display: flex;
         justify-content: space-between;
