@@ -142,6 +142,7 @@ export const useCartStore = defineStore('cart', () => {
         getCards,
         apply,
         getCard,
+        saveCart,
         cartCount,
         cardsCountArr,
         discount,

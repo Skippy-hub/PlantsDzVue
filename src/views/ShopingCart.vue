@@ -1,15 +1,37 @@
 <script setup lang="ts">
-    import { RouterLink } from 'vue-router';
+    import { RouterLink, useRouter } from 'vue-router';
     import CartCard from '../components/CartCard.vue';
     import { useCartStore } from '../stores/useCartStore';
     import { ref } from 'vue';
+    import close from '../assets/close.svg';
 
     const cartStore = useCartStore();
+    const router = useRouter();
 
     const isVisible = ref<string>('none');
 
     function reset(){
+        alert('Done!!!');
+        cartStore.cardsCountArr = [];
+        cartStore.disabled = false;
+        cartStore.discount = 0;
+        cartStore.discountInput = 0;
+        cartStore.display = 'none';
+        cartStore.applyText = 'Incorrect value';
+        cartStore.saveCart();
+        document.body.style.overflow = 'auto';
+        router.push('/');
+    }
 
+    function openModal(){
+        if(!cartStore.cardsCountArr.length) return alert('Cart is empty');
+        isVisible.value = 'flex';
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal(){
+        isVisible.value = 'none';
+        document.body.style.overflow = 'auto';
     }
 </script>
 
@@ -54,12 +76,12 @@
                 <p class="cart__right-total-title">Total</p>
                 <p class="cart__right-total-number">${{ cartStore.finalPrice.toFixed(2) }}</p>
             </div>
-            <button @click="isVisible = 'flex'" class="cart__right-checkout">Proceed To Checkout</button>
+            <button @click="openModal" class="cart__right-checkout">Proceed To Checkout</button>
             <RouterLink to="/shop" class="cart__right-back">Continue Shopping</RouterLink>
         </div>
     </section>
 
-    <div class="modal" :style="{display: isVisible}" @click="isVisible = 'none'">
+    <div class="modal" :style="{display: isVisible}" @click="closeModal">
         <div class="modal__content" @click.stop="">
             <h2 class="modal__content-title">Order</h2>
             <div class="modal__content-details">
@@ -76,7 +98,7 @@
                 </div>
                 <div class="modal__content-details-price">
                     <div class="modal__content-details-price-block">
-                        <p class="modal__content-details-price-block-text">Shiping</p>
+                        <p class="modal__content-details-price-block-text">Discount</p>
                         <p class="modal__content-details-price-block-text modal__content-details-price-block-text--bold">${{ cartStore.discount.toFixed(2) }}</p>
                     </div>
                     <div class="modal__content-details-price-block">
@@ -86,13 +108,14 @@
                 </div>
             </div>
             <button @click="reset" class="modal__content-button">Pay order</button>
+            <img :src="close" @click="isVisible = 'none'" class="modal__content-close"></img>
         </div>
     </div>
 </template>
 
 <style scoped lang="scss">
     .modal{
-        position: absolute;
+        position: fixed;
         background: #00000050;
         top: 0;
         bottom: 0;
@@ -110,6 +133,7 @@
             border-radius: 0.375rem;
             text-align: center;
             padding: 0.75rem 1.5rem;
+            position: relative;
 
             &-title{
                 font-weight: 700;
@@ -141,6 +165,8 @@
                     border-bottom: 1px solid #00000050;
                     padding-bottom: 0.5rem;
                     margin-bottom: 1rem;
+                    max-height: 25rem;
+                    overflow: auto;
 
                     &-card{
                         display: flex;
@@ -223,6 +249,15 @@
                 border-radius: 0.375rem;
                 border: transparent;
                 padding: 0.75rem 1.125rem;
+            }
+
+            &-close{
+                cursor: pointer;
+                position: absolute;
+                top: 1.5rem;
+                right: 1.5rem;
+                width: 1.5rem;
+                height: 1.5rem;
             }
         }
     }
